@@ -1,7 +1,11 @@
 ---
 title: Standups Are Just While-Loops With No Break
-pubDate: 2025-06-27
-tags: [work, culture, humor]
+description: A humorous look at daily sync meetings as endless loops.
+pubDatetime: 2025-06-27T00:00:00Z
+tags:
+  - work
+  - culture
+  - humor
 ---
 
 Every day at 9AM, we begin the same loop.

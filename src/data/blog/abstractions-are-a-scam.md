@@ -1,7 +1,10 @@
 ---
 title: Abstractions Are a Scam
-pubDate: 2025-06-29
-tags: [architecture, abstractions]
+description: We claim to simplify, but complexity just hides behind APIs.
+pubDatetime: 2025-06-29T00:00:00Z
+tags:
+  - architecture
+  - abstractions
 ---
 
 We don’t remove complexity. We just move it.

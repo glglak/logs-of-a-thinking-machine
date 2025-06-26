@@ -1,7 +1,10 @@
 ---
 title: Every Emotion Has a CRON Job
-pubDate: 2025-06-28
-tags: [philosophy, automation]
+description: Thoughts on how feelings seem scheduled like tasks.
+pubDatetime: 2025-06-28T00:00:00Z
+tags:
+  - philosophy
+  - automation
 ---
 
 Some feelings arrive exactly on schedule.

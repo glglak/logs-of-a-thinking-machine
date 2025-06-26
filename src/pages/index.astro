@@ -10,7 +10,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
 
 <Layout>
   <main id="main-content" class="mx-auto max-w-app px-4 py-16">
-    <h1 class="mb-2 text-center text-4xl font-bold">🧠 {SITE.title}</h1>
+    <h1 class="mb-2 text-center text-4xl font-bold">{SITE.title}</h1>
     <p class="mb-8 text-center">{SITE.desc}</p>
     {posts.length > 0 && (
       <ul>

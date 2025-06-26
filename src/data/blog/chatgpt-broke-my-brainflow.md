@@ -1,7 +1,11 @@
 ---
 title: ChatGPT Broke My Brainflow
-pubDate: 2025-07-01
-tags: [ai, tools, mental models]
+description: Auto-completions speed up thinking but slow down reflection.
+pubDatetime: 2025-07-01T00:00:00Z
+tags:
+  - ai
+  - tools
+  - mental models
 ---
 
 It finishes my sentences, but now I forget how to write them.

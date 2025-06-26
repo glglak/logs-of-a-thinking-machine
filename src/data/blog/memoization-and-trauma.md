@@ -1,7 +1,11 @@
 ---
 title: Memoization and Trauma
-pubDate: 2025-07-04
-tags: [mental models, caching, brain]
+description: Cached reactions are quick but not always right.
+pubDatetime: 2025-07-04T00:00:00Z
+tags:
+  - mental models
+  - caching
+  - brain
 ---
 
 Some responses are instant because they’re cached.
