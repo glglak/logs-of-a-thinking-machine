@@ -15,3 +15,6 @@ Maybe love is a poorly scoped function.
 Maybe sadness is a misconfigured CRON job.
 
 Logs of a thinking machine. That’s all we are.
+Maybe anger is a CPU spike that eventually throttles.
+Joy might be a clean deploy that lasts until the next bug.
+We collect the logs, yet rarely read them.

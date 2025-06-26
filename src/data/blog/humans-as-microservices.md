@@ -13,3 +13,6 @@ Async apologies.
 Versioning of personalities.
 
 Some are resilient. Some just 502.
+We retry until someone finally responds.
+Occasionally the system degrades instead of scaling.
+Maybe we all need a health check endpoint.

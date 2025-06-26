@@ -13,3 +13,5 @@ It finishes my sentences, but now I forget how to write them.
 I think faster. But I reflect less.
 
 Trade-offs, everywhere.
+Creativity feels like it's on autopilot, and I'm just along for the ride.
+The blank page no longer scares me, but it also no longer inspires me.

@@ -4,14 +4,16 @@ import LinkButton from "./LinkButton.astro";
 
 export interface Props {
   centered?: boolean;
+  names?: string[];
 }
 
-const { centered = false } = Astro.props;
+const { centered = false, names } = Astro.props;
+const socials = names ? SOCIALS.filter(s => names.includes(s.name)) : SOCIALS;
 ---
 
 <div class:list={["flex-wrap justify-center gap-1", { flex: centered }]}>
   {
-    SOCIALS.map(social => (
+    socials.map(social => (
       <LinkButton
         href={social.href}
         class="p-2 hover:rotate-6 sm:p-1"

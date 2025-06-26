@@ -14,3 +14,6 @@ Every day at 9AM, we begin the same loop.
 - Action: none
 
 Just a while-loop with no break statement.
+Occasionally someone times out, but the loop continues.
+We call it alignment but rarely align.
+It runs until morale hits zero.

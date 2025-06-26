@@ -12,3 +12,5 @@ Bugs aren’t failures. They’re mismatches in intent.
 Like team arguments in code form.
 
 Specs unclear. Emotions unhandled.
+We patch symptoms instead of clarifying expectations.
+Without conversation, the same bug resurfaces in new tickets.

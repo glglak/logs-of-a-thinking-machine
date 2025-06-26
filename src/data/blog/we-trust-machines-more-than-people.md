@@ -12,3 +12,5 @@ Google Maps says go left, and we go.
 A friend says turn around, and we argue.
 
 Automation doesn’t just scale — it earns unearned trust.
+When the algorithm fails, we blame ourselves, not the code.
+Maybe we’ve outsourced too much of our faith to silicon.

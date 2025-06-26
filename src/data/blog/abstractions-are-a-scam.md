@@ -12,3 +12,6 @@ Put it behind a pretty API and call it simplicity.
 Until someone needs to debug it.
 
 Then it’s all turtles.
+The layers keep stacking until no one remembers the bottom.
+Each new abstraction is a smaller box inside a bigger one.
+Eventually we forget which box does what.
