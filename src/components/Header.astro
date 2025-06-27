@@ -23,7 +23,7 @@ const isActive = (path: string) => {
 };
 ---
 
-<header>
+<header class="bg-neutral-900 text-white shadow-md">
   <a
     id="skip-to-content"
     href="#main-content"
@@ -33,11 +33,11 @@ const isActive = (path: string) => {
   </a>
   <div
     id="nav-container"
-    class="mx-auto flex max-w-app flex-col items-center justify-between sm:flex-row"
+    class="mx-auto flex max-w-app flex-col items-center sm:flex-row"
   >
     <div
       id="top-nav-wrap"
-      class="relative flex w-full items-baseline justify-between bg-background p-4 sm:items-center sm:py-6"
+      class="relative flex w-full items-baseline justify-start gap-4 p-4 sm:items-center sm:py-4"
     >
       <a
         href="/"
@@ -47,11 +47,11 @@ const isActive = (path: string) => {
       </a>
       <nav
         id="nav-menu"
-        class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
+        class="flex flex-col items-center sm:ms-4 sm:flex-row sm:justify-start sm:space-x-4 sm:py-0"
       >
         <button
           id="menu-btn"
-          class="focus-outline self-end p-2 sm:hidden"
+          class="focus-outline self-end p-2 rounded hover:bg-accent/20 sm:hidden"
           aria-label="Open Menu"
           aria-expanded="false"
           aria-controls="menu-items"

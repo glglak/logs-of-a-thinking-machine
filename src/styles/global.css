@@ -7,7 +7,7 @@
 html[data-theme="light"] {
   --background: #fdfdfd;
   --foreground: #282728;
-  --accent: #006cac;
+  --accent: #3b49df;
   --muted: #e6e6e6;
   --border: #ece9e9;
 }
@@ -15,7 +15,7 @@ html[data-theme="light"] {
 html[data-theme="dark"] {
   --background: #212737;
   --foreground: #eaedf3;
-  --accent: #ff6b01;
+  --accent: #3b49df;
   --muted: #343f60bf;
   --border: #ab4b08;
 }
@@ -38,7 +38,7 @@ html[data-theme="dark"] {
     @apply overflow-y-scroll scroll-smooth;
   }
   body {
-    @apply flex min-h-svh flex-col bg-background font-mono text-foreground selection:bg-accent/75 selection:text-background;
+    @apply flex min-h-svh flex-col bg-background font-sans text-foreground selection:bg-accent/75 selection:text-background;
   }
   a,
   button {
@@ -55,7 +55,7 @@ html[data-theme="dark"] {
 }
 
 @utility max-w-app {
-  @apply max-w-3xl;
+  @apply max-w-4xl;
 }
 
 .active-nav {
@@ -67,3 +67,4 @@ html[data-theme="dark"] {
 :target {
   scroll-margin-block: 1rem;
 }
+
