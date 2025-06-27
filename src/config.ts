@@ -1,7 +1,10 @@
 export const SITE = {
   website: "https://logs-of-a-thinking-machine.vercel.app/", // replace with your actual domain
   author: "Karim",
+
   profile: "https://www.linkedin.com/in/karimderaz/",
+
+ 
   desc: "Where architecture meets abstraction and automation.",
   title: "Logs of a Thinking Machine",
   ogImage: "logs-of-a-thinking-machine-og.jpg",

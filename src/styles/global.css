@@ -68,3 +68,11 @@ html[data-theme="dark"] {
   scroll-margin-block: 1rem;
 }
 
+
+header {
+  @apply bg-gradient-to-b from-accent/20 to-background backdrop-blur-sm;
+}
+#top-nav-wrap {
+  @apply bg-background/80 backdrop-blur-md rounded-b-md;
+}
+

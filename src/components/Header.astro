@@ -23,7 +23,11 @@ const isActive = (path: string) => {
 };
 ---
 
+
 <header class="bg-neutral-900 text-white shadow-md">
+=======
+<header class="shadow-md">
+ 
   <a
     id="skip-to-content"
     href="#main-content"
@@ -38,6 +42,9 @@ const isActive = (path: string) => {
     <div
       id="top-nav-wrap"
       class="relative flex w-full items-baseline justify-start gap-4 p-4 sm:items-center sm:py-4"
+
+      class="relative flex w-full items-baseline justify-between bg-background/80 backdrop-blur-md p-4 sm:items-center sm:py-6"
+
     >
       <a
         href="/"
