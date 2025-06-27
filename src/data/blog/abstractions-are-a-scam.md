@@ -2,6 +2,7 @@
 title: Abstractions Are a Scam
 description: We claim to simplify, but complexity just hides behind APIs.
 pubDatetime: 2025-06-29T00:00:00Z
+coverImage: ../../assets/images/AstroPaper-v3.png
 tags:
   - architecture
   - abstractions

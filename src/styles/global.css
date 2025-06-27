@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./typography.css";
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700&display=swap");
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
@@ -7,7 +8,7 @@
 html[data-theme="light"] {
   --background: #fdfdfd;
   --foreground: #282728;
-  --accent: #1e90ff;
+  --accent: #3b49df;
   --muted: #e6e6e6;
   --border: #ece9e9;
 }
@@ -15,9 +16,9 @@ html[data-theme="light"] {
 html[data-theme="dark"] {
   --background: #212737;
   --foreground: #eaedf3;
-  --accent: #ff851b;
+  --accent: #3b49df;
   --muted: #343f60bf;
-  --border: #ab4b08;
+  --border: #3b49df;
 }
 
 @theme inline {
@@ -39,6 +40,7 @@ html[data-theme="dark"] {
   }
   body {
     @apply flex min-h-svh flex-col bg-background font-sans text-foreground selection:bg-accent/75 selection:text-background;
+    font-family: "Fira Sans", theme("fontFamily.sans"), sans-serif;
   }
   a,
   button {

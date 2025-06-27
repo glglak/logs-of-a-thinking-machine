@@ -1,0 +1,23 @@
+---
+import IconArchive from "@/assets/icons/IconArchive.svg";
+import IconHash from "@/assets/icons/IconHash.svg";
+import IconSearch from "@/assets/icons/IconSearch.svg";
+---
+<aside class="hidden sm:block w-60 shrink-0 border-r border-border bg-muted/40 px-4 py-6">
+  <nav class="space-y-4 text-lg font-semibold">
+    <a href="/" class="block hover:text-accent">Home</a>
+    <a href="/posts" class="block hover:text-accent flex items-center space-x-2">
+      <IconArchive class="size-5" />
+      <span>Posts</span>
+    </a>
+    <a href="/tags" class="block hover:text-accent flex items-center space-x-2">
+      <IconHash class="size-5" />
+      <span>Tags</span>
+    </a>
+    <a href="/search" class="block hover:text-accent flex items-center space-x-2">
+      <IconSearch class="size-5" />
+      <span>Search</span>
+    </a>
+    <a href="/about" class="block hover:text-accent">About</a>
+  </nav>
+</aside>

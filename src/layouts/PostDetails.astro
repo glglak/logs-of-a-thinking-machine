@@ -32,6 +32,7 @@ const {
   modDatetime,
   timezone,
   tags,
+  coverImage,
   hideEditPost,
 } = post.data;
 
@@ -104,6 +105,13 @@ const nextPost =
       <span aria-hidden="true" class="max-sm:hidden">|</span>
       <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
+    {coverImage && (
+      <img
+        class="my-6 rounded-md"
+        src={typeof coverImage === "string" ? coverImage : coverImage.src}
+        alt={title}
+      />
+    )}
     <article
       id="article"
       class="app-prose mx-auto mt-8 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
