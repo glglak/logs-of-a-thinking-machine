@@ -23,41 +23,28 @@ const isActive = (path: string) => {
 };
 ---
 
-
-<header class="bg-neutral-900 text-white shadow-md">
-=======
-<header class="shadow-md">
- 
-  <a
-    id="skip-to-content"
-    href="#main-content"
-    class="absolute start-16 -top-full z-50 bg-background px-3 py-2 text-accent backdrop-blur-lg transition-all focus:top-4"
-  >
-    Skip to content
-  </a>
-  <div
-    id="nav-container"
-    class="mx-auto flex max-w-app flex-col items-center sm:flex-row"
-  >
-    <div
-      id="top-nav-wrap"
-      class="relative flex w-full items-baseline justify-start gap-4 p-4 sm:items-center sm:py-4"
-
-      class="relative flex w-full items-baseline justify-between bg-background/80 backdrop-blur-md p-4 sm:items-center sm:py-6"
-
-    >
-      <a
-        href="/"
-        class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-      >
-        {SITE.title}
-      </a>
-      <nav
-        id="nav-menu"
-        class="flex flex-col items-center sm:ms-4 sm:flex-row sm:justify-start sm:space-x-4 sm:py-0"
-      >
-        <button
-          id="menu-btn"
+  <div id="nav-container" class="mx-auto flex max-w-app items-center justify-between p-4">
+    <div class="flex items-center gap-4">
+      <button
+        id="menu-btn"
+        class="focus-outline p-2 rounded hover:bg-accent/20 sm:hidden"
+        aria-label="Open Menu"
+        aria-expanded="false"
+        aria-controls="menu-items"
+        <IconX id="close-icon" class="hidden" />
+        <IconMenuDeep id="menu-icon" />
+      </button>
+      <a href="/" class="font-semibold text-xl sm:text-2xl whitespace-nowrap">{SITE.title}</a>
+    </div>
+    <nav id="nav-menu" class="hidden sm:flex items-center gap-4">
+      <ul
+        id="menu-items"
+        class:list=[
+          "mt-4 grid w-44 grid-cols-2 place-content-center gap-2",
+          "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-2 sm:[&>li>a]:py-1",
+          "hidden",
+          "sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0",
+        ]
           class="focus-outline self-end p-2 rounded hover:bg-accent/20 sm:hidden"
           aria-label="Open Menu"
           aria-expanded="false"
@@ -110,7 +97,6 @@ const isActive = (path: string) => {
               </li>
             )
           }
-          <li class="col-span-1 flex items-center justify-center">
             <LinkButton
               href="/search"
               class:list={[
