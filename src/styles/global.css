@@ -7,7 +7,7 @@
 html[data-theme="light"] {
   --background: #fdfdfd;
   --foreground: #282728;
-  --accent: #1e90ff;
+  --accent: #3b49df;
   --muted: #e6e6e6;
   --border: #ece9e9;
 }
@@ -15,7 +15,7 @@ html[data-theme="light"] {
 html[data-theme="dark"] {
   --background: #212737;
   --foreground: #eaedf3;
-  --accent: #ff851b;
+  --accent: #3b49df;
   --muted: #343f60bf;
   --border: #ab4b08;
 }
@@ -68,9 +68,3 @@ html[data-theme="dark"] {
   scroll-margin-block: 1rem;
 }
 
-header {
-  @apply bg-gradient-to-b from-accent/20 to-background backdrop-blur-sm;
-}
-#top-nav-wrap {
-  @apply bg-background/80 backdrop-blur-md rounded-b-md;
-}
