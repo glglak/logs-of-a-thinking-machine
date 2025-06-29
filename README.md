@@ -1,4 +1,4 @@
-# 📝🤔 Logs of a Thinking Machine
+# 🎛️ Logs of a Thinking Machine
 
 > *Where architecture meets AI and philosophy*
 
@@ -9,7 +9,7 @@ A modern blog exploring the intersection of technology, software architecture, a
 **Logs of a Thinking Machine** is a collection of byte-sized articles that dive into:
 
 - 🏗️ **Software Architecture** - Patterns, principles, and pragmatic design decisions
-- 📝🤔 **AI & Technology** - The evolving landscape of artificial intelligence
+- 🎛️ **AI & Technology** - The evolving landscape of artificial intelligence
 - 🧠 **Philosophy of Code** - The human stories behind the systems we build
 - 💭 **Tech Reflections** - Thoughtful takes on industry trends and practices
 
