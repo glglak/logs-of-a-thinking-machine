@@ -1,0 +1,53 @@
+/* Emergency icon size overrides */
+* svg {
+  max-width: 2rem !important;
+  max-height: 2rem !important;
+}
+
+header svg,
+.header svg,
+[data-icon] svg,
+[astro-icon] svg {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+
+button svg {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+}
+
+.icon-container svg,
+.social-icon svg,
+.force-icon-size svg,
+.force-header-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+
+/* Sidebar navigation icons */
+nav svg,
+aside svg {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+}
+
+/* Mobile menu icons should be slightly larger */
+#mobile-menu-btn svg {
+  width: 24px !important;
+  height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+} 

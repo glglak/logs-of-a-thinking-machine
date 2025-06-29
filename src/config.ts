@@ -1,22 +1,22 @@
 export const SITE = {
-  website: "https://logs-of-a-thinking-machine.vercel.app/", // replace with your actual domain
-  author: "Karim",
-  profile: "https://linkedin.com/in/moodraz",
-  desc: "Where architecture meets abstraction and automation.",
+  website: "https://logs-of-a-thinking-machine.vercel.app/",
+  author: "Karim Deraz",
+  profile: "https://www.linkedin.com/in/karimderaz/",
+  desc: "Where architecture meets AI and philosophy. Byte-sized thoughts from a thinking machine exploring the intersection of technology, humanity, and the stories we tell ourselves in code.",
   title: "Logs of a Thinking Machine",
   ogImage: "logs-of-a-thinking-machine-og.jpg",
   lightAndDarkMode: true,
-  postPerIndex: 100, // remove pagination
-  postPerPage: 100,
+  postPerIndex: 6, // Better for dev.to style
+  postPerPage: 12,
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
   showArchives: false,
-  showBackButton: false,
+  showBackButton: true,
   editPost: {
     enabled: false,
     text: "Edit page",
     url: "",
   },
-  dynamicOgImage: false,
+  dynamicOgImage: true, // Enable for better social sharing
   dir: "ltr",
   lang: "en",
   timezone: "Asia/Riyadh",

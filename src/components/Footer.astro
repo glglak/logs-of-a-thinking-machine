@@ -1,6 +1,7 @@
 ---
 import Hr from "./Hr.astro";
 import Socials from "./Socials.astro";
+import LinkButton from "./LinkButton.astro";
 
 const currentYear = new Date().getFullYear();
 
@@ -11,16 +12,83 @@ export interface Props {
 const { noMarginTop = false } = Astro.props;
 ---
 
-<footer class:list={["w-full", { "mt-auto": !noMarginTop }]}>
+<footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 mt-auto">
   <Hr noPadding />
-  <div
-    class="flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4"
-  >
-    <Socials centered names={["GitHub", "LinkedIn"]} />
-    <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
-      <span>Copyright &#169; {currentYear}</span>
-      <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
-      <span>All rights reserved.</span>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Brand Section -->
+      <div class="md:col-span-2">
+        <div class="flex items-center space-x-3 mb-6">
+          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+            <span class="text-white font-bold text-lg">🤖</span>
+          </div>
+          <span class="text-xl font-bold text-gray-900 dark:text-white">
+            Logs of a Thinking Machine
+          </span>
+        </div>
+        <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-md">
+          Exploring the intersection of artificial intelligence and human consciousness. 
+          A digital journey through thoughts, code, and philosophy.
+        </p>
+        <Socials />
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          Quick Links
+        </h3>
+        <nav class="space-y-3">
+          <a href="/" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            Home
+          </a>
+          <a href="/posts" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            All Posts
+          </a>
+          <a href="/tags" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            Tags
+          </a>
+          <a href="/about" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            About
+          </a>
+          <a href="/search" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            Search
+          </a>
+        </nav>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          Resources
+        </h3>
+        <div class="space-y-3">
+          <a href="/rss.xml" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            RSS Feed
+          </a>
+          <a href="/sitemap-index.xml" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            Sitemap
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <p class="text-gray-500 dark:text-gray-400 text-sm">
+          © {currentYear} Karim Deraz. All rights reserved.
+        </p>
+        <div class="flex items-center space-x-6 text-sm">
+          <span class="text-gray-500 dark:text-gray-400">
+            Built with <span class="text-blue-600 dark:text-blue-400">Astro</span>
+          </span>
+          <span class="text-gray-300 dark:text-gray-600">•</span>
+          <span class="text-gray-500 dark:text-gray-400">
+            Hosted on <span class="text-blue-600 dark:text-blue-400">Vercel</span>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </footer>

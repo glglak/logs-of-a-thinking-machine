@@ -2,6 +2,7 @@
 title: Humans as Microservices
 description: Thinking of conversations and apologies like stateless calls.
 pubDatetime: 2025-06-30T00:00:00Z
+heroImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=400&fit=crop"
 tags:
   - ai
   - humans

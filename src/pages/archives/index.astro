@@ -1,9 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Main from "@/layouts/Main.astro";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
+import DevLayout from "@/layouts/DevLayout.astro";
 import Card from "@/components/Card.astro";
 import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
 import { SITE } from "@/config";
@@ -31,9 +28,15 @@ const months = [
 ];
 ---
 
-<Layout title={`Archives | ${SITE.title}`}>
-  <Header />
-  <Main pageTitle="Archives" pageDesc="All the articles I've archived.">
+<DevLayout title={`Archives | ${SITE.title}`} description="All the articles I've archived.">
+  <!-- Page Header -->
+  <div class="mb-8 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Archives</h1>
+    <p class="text-gray-600 dark:text-gray-300">All the articles I've archived.</p>
+  </div>
+  
+  <!-- Archives Content -->
+  <div class="space-y-8">
     {
       Object.entries(
         getPostsByGroupCondition(posts, post =>
@@ -42,9 +45,12 @@ const months = [
       )
         .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
         .map(([year, yearGroup]) => (
-          <div>
-            <span class="text-2xl font-bold">{year}</span>
-            <sup class="text-sm">{yearGroup.length}</sup>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              {year}
+              <sup class="text-sm text-gray-500 dark:text-gray-400 ml-1">{yearGroup.length}</sup>
+            </h2>
+            
             {Object.entries(
               getPostsByGroupCondition(
                 yearGroup,
@@ -53,31 +59,34 @@ const months = [
             )
               .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
               .map(([month, monthGroup]) => (
-                <div class="flex flex-col sm:flex-row">
-                  <div class="mt-6 min-w-36 text-lg sm:my-6">
-                    <span class="font-bold">{months[Number(month) - 1]}</span>
-                    <sup class="text-xs">{monthGroup.length}</sup>
+                <div class="mb-6 last:mb-0">
+                  <div class="flex flex-col sm:flex-row">
+                    <div class="min-w-36 mb-4 sm:mb-0 sm:mr-6">
+                      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                        {months[Number(month) - 1]}
+                        <sup class="text-xs text-gray-500 dark:text-gray-400 ml-1">{monthGroup.length}</sup>
+                      </h3>
+                    </div>
+                    <ul class="flex-1 space-y-4">
+                      {monthGroup
+                        .sort(
+                          (a, b) =>
+                            Math.floor(
+                              new Date(b.data.pubDatetime).getTime() / 1000
+                            ) -
+                            Math.floor(
+                              new Date(a.data.pubDatetime).getTime() / 1000
+                            )
+                        )
+                        .map(post => (
+                          <Card {...post} />
+                        ))}
+                    </ul>
                   </div>
-                  <ul>
-                    {monthGroup
-                      .sort(
-                        (a, b) =>
-                          Math.floor(
-                            new Date(b.data.pubDatetime).getTime() / 1000
-                          ) -
-                          Math.floor(
-                            new Date(a.data.pubDatetime).getTime() / 1000
-                          )
-                      )
-                      .map(data => (
-                        <Card {...data} />
-                      ))}
-                  </ul>
                 </div>
               ))}
           </div>
         ))
     }
-  </Main>
-  <Footer />
-</Layout>
+  </div>
+</DevLayout>

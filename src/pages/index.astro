@@ -1,21 +1,33 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "@/layouts/Layout.astro";
+import DevLayout from "@/layouts/DevLayout.astro";
 import Card from "@/components/Card.astro";
 import { SITE } from "@/config";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf());
+  .sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf())
+  .slice(0, SITE.postPerIndex);
+
+console.log("Posts found:", posts.length);
 ---
 
-<Layout>
-  <main id="main-content" class="mx-auto max-w-app px-4 py-16">
-    <h1 class="mb-2 text-center text-4xl font-bold">{SITE.title}</h1>
-    <p class="mb-8 text-center">{SITE.desc}</p>
-    {posts.length > 0 && (
-      <ul>
-        {posts.map(post => <Card variant="h3" {...post} />)}
+<DevLayout title={SITE.title} description={SITE.desc}>
+  <!-- Welcome Section -->
+  <div class="mb-8 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{SITE.title}</h1>
+    <p class="text-gray-600 dark:text-gray-300 text-lg">{SITE.desc}</p>
+  </div>
+  
+  <!-- Posts Feed -->
+  <div class="space-y-6">
+    {posts.length > 0 ? (
+      <ul class="space-y-6">
+        {posts.map(post => <Card variant="h2" {...post} />)}
       </ul>
+    ) : (
+      <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <p class="text-gray-600 dark:text-gray-400">No posts found.</p>
+      </div>
     )}
-  </main>
-</Layout>
+  </div>
+</DevLayout>
