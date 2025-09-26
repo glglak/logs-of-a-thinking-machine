@@ -1,94 +1,38 @@
 ---
-import Hr from "./Hr.astro";
-import Socials from "./Socials.astro";
-import LinkButton from "./LinkButton.astro";
+import { SITE } from "@/config";
 
-const currentYear = new Date().getFullYear();
+type SocialLink = {
+  href?: string;
+  label?: string;
+  icon?: any; // optional Astro/JSX component
+};
 
-export interface Props {
-  noMarginTop?: boolean;
+// Normalize & filter links so href is always a non-empty string
+const rawLinks: SocialLink[] = (SITE as any)?.socials ?? [];
+const links = rawLinks
+  .filter((l) => l && typeof l.href === "string")
+  .map((l) => ({ ...l, href: (l.href as string).trim() }))
+  .filter((l) => l.href.length > 0);
+
+function isExternal(href: string) {
+  return /^(https?:)?\/\//i.test(href); // https:// or //cdn…
 }
-
-const { noMarginTop = false } = Astro.props;
 ---
 
-<footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 mt-auto">
-  <Hr noPadding />
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <!-- Brand Section -->
-      <div class="md:col-span-2">
-        <div class="flex items-center space-x-3 mb-6">
-          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
-            <span class="text-white font-bold text-lg">🎛️</span>
-          </div>
-          <span class="text-xl font-bold text-gray-900 dark:text-white">
-            Logs of a Thinking Machine
-          </span>
-        </div>
-        <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-md">
-          Exploring the intersection of artificial intelligence and human consciousness. 
-          A digital journey through thoughts, code, and philosophy.
-        </p>
-        <Socials />
-      </div>
-
-      <!-- Quick Links -->
-      <div>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Quick Links
-        </h3>
-        <nav class="space-y-3">
-          <a href="/" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            Home
-          </a>
-          <a href="/posts" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            All Posts
-          </a>
-          <a href="/tags" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            Tags
-          </a>
-          <a href="/about" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            About
-          </a>
-          <a href="/search" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            Search
-          </a>
-        </nav>
-      </div>
-
-      <!-- Resources -->
-      <div>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Resources
-        </h3>
-        <div class="space-y-3">
-          <a href="/rss.xml" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            RSS Feed
-          </a>
-          <a href="/sitemap-index.xml" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            Sitemap
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom Section -->
-    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-        <p class="text-gray-500 dark:text-gray-400 text-sm">
-          © {currentYear} Karim Deraz. All rights reserved.
-        </p>
-        <div class="flex items-center space-x-6 text-sm">
-          <span class="text-gray-500 dark:text-gray-400">
-            Built with <span class="text-blue-600 dark:text-blue-400">Astro</span>
-          </span>
-          <span class="text-gray-300 dark:text-gray-600">•</span>
-          <span class="text-gray-500 dark:text-gray-400">
-            Hosted on <span class="text-blue-600 dark:text-blue-400">Vercel</span>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
+{links.length > 0 && (
+  <ul class="flex flex-wrap gap-3">
+    {links.map((l) => (
+      <li>
+        <a
+          href={l.href}
+          target={isExternal(l.href) ? "_blank" : undefined}
+          rel={isExternal(l.href) ? "noopener noreferrer" : undefined}
+          class="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+        >
+          {l.icon ? <l.icon /> : null}
+          <span>{l.label ?? l.href}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
