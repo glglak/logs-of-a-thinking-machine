@@ -1,9 +1,18 @@
 ---
 import { ViewTransitions } from "astro:transitions";
+import { getCollection } from "astro:content";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Sidebar from "@/components/Sidebar.astro";
 import "@/styles/global.css";
+
+// Get dynamic stats
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const totalPosts = allPosts.length;
+
+// Get unique tags
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+const totalTags = allTags.length;
 
 export interface Props {
   title?: string;
@@ -136,15 +145,15 @@ const {
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-gray-600 dark:text-gray-300">Total Posts</span>
-                <span class="font-semibold text-blue-600 dark:text-blue-400">12</span>
+                <span class="font-semibold text-blue-600 dark:text-blue-400">{totalPosts}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-600 dark:text-gray-300">Categories</span>
-                <span class="font-semibold text-blue-600 dark:text-blue-400">5</span>
+                <span class="font-semibold text-blue-600 dark:text-blue-400">3</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-600 dark:text-gray-300">Tags</span>
-                <span class="font-semibold text-blue-600 dark:text-blue-400">18</span>
+                <span class="font-semibold text-blue-600 dark:text-blue-400">{totalTags}</span>
               </div>
             </div>
           </div>
