@@ -27,7 +27,7 @@ const isActive = (path: string) => {
             <span class="text-white font-bold text-lg">🎛️</span>
           </div>
           <span class="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            {SITE.title}
+        {SITE.title}
           </span>
         </a>
       </div>
@@ -42,27 +42,27 @@ const isActive = (path: string) => {
           <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
           <path d="M4 6h16M4 12h8m-8 6h16"/>
         </svg>
-      </button>
+        </button>
       
       <!-- Right side actions -->
       <div class="hidden lg:flex items-center space-x-3">
         <!-- Search -->
-        <LinkButton
-          href="/search"
+            <LinkButton
+              href="/search"
           class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200"
           ariaLabel="Search"
-          title="Search"
-        >
+              title="Search"
+            >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-        </LinkButton>
+            </LinkButton>
         
         <!-- Theme Toggle -->
         {SITE.lightAndDarkMode && (
-          <button
-            id="theme-btn"
+                <button
+                  id="theme-btn"
             class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200"
             title="Toggle theme"
             aria-label="Toggle theme"
@@ -113,7 +113,7 @@ const isActive = (path: string) => {
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
-        </button>
+                </button>
       </div>
       
       <nav class="space-y-2">

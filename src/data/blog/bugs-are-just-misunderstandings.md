@@ -3,6 +3,7 @@ title: Bugs Are Just Misunderstandings
 description: Code failures mirror miscommunication among teams.
 pubDatetime: 2025-07-02T00:00:00Z
 heroImage: "/assets/images/bug-communication.svg"
+ogImage: "/assets/images/bugs-social.svg"
 tags:
   - bugs
   - communication

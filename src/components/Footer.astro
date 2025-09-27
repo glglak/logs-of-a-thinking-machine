@@ -1,23 +1,8 @@
+---
 import Hr from "./Hr.astro";
 import Socials from "./Socials.astro";
-import LinkButton from "./LinkButton.astro";
 
 const currentYear = new Date().getFullYear();
-
-
-
-
-
-export interface Props {
-  noMarginTop?: boolean;
-}
-
-
-
-
-const { noMarginTop = false } = Astro.props;
-
-
 ---
 
 <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 mt-auto">

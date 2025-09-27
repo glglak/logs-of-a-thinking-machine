@@ -3,6 +3,7 @@ title: We Trust Machines More Than People
 description: Automation earns our trust faster than friends do.
 pubDatetime: 2025-07-03T00:00:00Z
 heroImage: "/assets/images/trust-machine.svg"
+ogImage: "/assets/images/trust-social.svg"
 tags:
   - automation bias
   - psychology

@@ -20,7 +20,7 @@ const {
 } = Astro.props;
 
 // Auto-detect external links
-const isExternal = external || href.startsWith('http') || href.startsWith('mailto:');
+const isExternal = external || (href && (href.startsWith('http') || href.startsWith('mailto:')));
 ---
 
 {

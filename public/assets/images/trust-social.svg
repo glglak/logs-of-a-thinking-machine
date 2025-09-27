@@ -1,0 +1,74 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b" />
+      <stop offset="100%" style="stop-color:#0f172a" />
+    </linearGradient>
+    <linearGradient id="trust" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ef4444" />
+      <stop offset="50%" style="stop-color:#f59e0b" />
+      <stop offset="100%" style="stop-color:#10b981" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="630" fill="url(#bg)" />
+  
+  <text x="600" y="70" text-anchor="middle" fill="#f1f5f9" font-family="Arial, sans-serif" font-size="36" font-weight="bold">We Trust Machines More Than People</text>
+  <text x="600" y="110" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="20">Automation earns our trust faster than friends do</text>
+  
+  <!-- Human side -->
+  <g transform="translate(200, 180)">
+    <circle cx="75" cy="45" r="30" fill="#64748b" />
+    <rect x="52" y="75" width="46" height="60" rx="8" fill="#64748b" />
+    <rect x="37" y="105" width="23" height="45" rx="5" fill="#64748b" />
+    <rect x="90" y="105" width="23" height="45" rx="5" fill="#64748b" />
+    
+    <circle cx="45" cy="195" r="12" fill="#ef4444" opacity="0.8" />
+    <text x="45" y="203" text-anchor="middle" fill="white" font-size="16">😟</text>
+    <circle cx="75" cy="210" r="12" fill="#f59e0b" opacity="0.8" />
+    <text x="75" y="218" text-anchor="middle" fill="white" font-size="16">🤔</text>
+    <circle cx="105" cy="195" r="12" fill="#ef4444" opacity="0.8" />
+    <text x="105" y="203" text-anchor="middle" fill="white" font-size="16">😠</text>
+    
+    <text x="75" y="255" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Human Friend</text>
+    <text x="75" y="280" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="16">Unpredictable • Emotional</text>
+  </g>
+  
+  <!-- Machine side -->
+  <g transform="translate(800, 180)">
+    <rect x="45" y="30" width="60" height="53" rx="8" fill="#3b82f6" />
+    <rect x="53" y="38" width="15" height="12" rx="3" fill="#60a5fa" />
+    <rect x="83" y="38" width="15" height="12" rx="3" fill="#60a5fa" />
+    <rect x="63" y="57" width="24" height="6" rx="3" fill="#60a5fa" />
+    <rect x="38" y="83" width="75" height="60" rx="8" fill="#3b82f6" />
+    <rect x="15" y="98" width="23" height="30" rx="5" fill="#3b82f6" />
+    <rect x="113" y="98" width="23" height="30" rx="5" fill="#3b82f6" />
+    <rect x="53" y="143" width="18" height="38" rx="5" fill="#3b82f6" />
+    <rect x="80" y="143" width="18" height="38" rx="5" fill="#3b82f6" />
+    
+    <circle cx="45" cy="195" r="12" fill="#10b981" opacity="0.8" />
+    <text x="45" y="203" text-anchor="middle" fill="white" font-size="16">✓</text>
+    <circle cx="75" cy="210" r="12" fill="#10b981" opacity="0.8" />
+    <text x="75" y="218" text-anchor="middle" fill="white" font-size="16">✓</text>
+    <circle cx="105" cy="195" r="12" fill="#10b981" opacity="0.8" />
+    <text x="105" y="203" text-anchor="middle" fill="white" font-size="16">✓</text>
+    
+    <text x="75" y="255" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Machine Algorithm</text>
+    <text x="75" y="280" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="16">Consistent • Predictable</text>
+  </g>
+  
+  <!-- Trust flow -->
+  <g transform="translate(500, 320)">
+    <rect x="0" y="0" width="200" height="40" rx="20" fill="url(#trust)" />
+    <polygon points="180,0 200,20 180,40" fill="#10b981" />
+    <text x="100" y="28" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">TRUST FLOW</text>
+  </g>
+  
+  <!-- Logo -->
+  <g transform="translate(50, 50)">
+    <circle cx="25" cy="25" r="25" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+    <text x="25" y="35" text-anchor="middle" fill="#3b82f6" font-family="Arial, sans-serif" font-size="20">🎛️</text>
+  </g>
+  
+  <text x="600" y="580" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="18" style="font-style: italic;">"We prefer predictable failure over unpredictable success"</text>
+</svg> 
