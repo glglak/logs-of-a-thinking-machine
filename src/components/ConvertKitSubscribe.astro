@@ -53,9 +53,10 @@
         e.preventDefault();
         
         const formData = new FormData(form);
-        const email = formData.get('email_address');
+        const email = formData.get('email_address') as string;
         
-        if (!email) {
+        // Basic validation - just check if email exists and has @ symbol
+        if (!email || !email.includes('@')) {
           showMessage('Please enter a valid email address.', 'error');
           return;
         }
