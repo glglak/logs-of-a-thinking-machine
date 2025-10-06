@@ -37,7 +37,7 @@ const pillarOrder = ['ai-insights', 'architecture', 'philosophy', 'thinking-logs
           </h2>
           
           <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {pillarPosts.map(post => (
+            {pillarPosts.map((post: any) => (
               <div data-content-pillar={pillar}>
                 <ContentPillar
                   pillar={pillar}

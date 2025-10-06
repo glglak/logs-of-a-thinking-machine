@@ -1,6 +1,6 @@
 ---
 export interface Props {
-  pillar: 'ai-insights' | 'architecture' | 'philosophy' | 'thinking-logs';
+  pillar: string;
   title: string;
   description: string;
   date: Date;
@@ -45,7 +45,14 @@ const pillarConfig = {
   }
 };
 
-const config = pillarConfig[pillar];
+const config = pillarConfig[pillar] || {
+  color: 'gray',
+  icon: '📄',
+  bgClass: 'bg-gray-50 dark:bg-gray-900/20',
+  borderClass: 'border-gray-200 dark:border-gray-800',
+  textClass: 'text-gray-800 dark:text-gray-200',
+  accentClass: 'text-gray-600 dark:text-gray-400'
+};
 ---
 
 <div class={`rounded-lg p-6 border-2 ${config.bgClass} ${config.borderClass}`}>
