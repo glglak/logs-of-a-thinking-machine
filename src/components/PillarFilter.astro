@@ -21,7 +21,7 @@ const pillars = [
   </h2>
   
   <div class="flex flex-wrap gap-2">
-    {pillars.map(pillar => (
+        {pillars.map(pillar => (
       <button
         class={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
           currentPillar === pillar.id
@@ -33,17 +33,19 @@ const pillars = [
         <span class="mr-2">{pillar.icon}</span>
         {pillar.name}
       </button>
+        ))}
   </div>
 </div>
 
 <script>
   // Handle pillar filtering
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('[data-pillar]');
     
     buttons.forEach(button => {
-      button.addEventListener('click', function() {
-        const pillar = this.getAttribute('data-pillar');
+      button.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        const pillar = target.getAttribute('data-pillar');
         
         // Update active state
         buttons.forEach(btn => {
@@ -51,24 +53,25 @@ const pillars = [
           btn.classList.add('bg-white', 'dark:bg-gray-800', 'border-gray-200', 'dark:border-gray-700', 'text-gray-700', 'dark:text-gray-300');
         });
         
-        this.classList.remove('bg-white', 'dark:bg-gray-800', 'border-gray-200', 'dark:border-gray-700', 'text-gray-700', 'dark:text-gray-300');
-        this.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-700', 'text-green-800', 'dark:text-green-200');
+        target.classList.remove('bg-white', 'dark:bg-gray-800', 'border-gray-200', 'dark:border-gray-700', 'text-gray-700', 'dark:text-gray-300');
+        target.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-700', 'text-green-800', 'dark:text-green-200');
         
         // Filter content
         filterContentByPillar(pillar);
       });
     });
     
-    function filterContentByPillar(pillar) {
+    function filterContentByPillar(pillar: string | null) {
       const contentItems = document.querySelectorAll('[data-content-pillar]');
       
       contentItems.forEach(item => {
-        const itemPillar = item.getAttribute('data-content-pillar');
+        const element = item as HTMLElement;
+        const itemPillar = element.getAttribute('data-content-pillar');
         
         if (pillar === 'all' || itemPillar === pillar) {
-          item.style.display = 'block';
+          (element as HTMLElement).style.display = 'block';
         } else {
-          item.style.display = 'none';
+          (element as HTMLElement).style.display = 'none';
         }
       });
     }
