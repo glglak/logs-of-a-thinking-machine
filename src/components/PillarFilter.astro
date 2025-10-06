@@ -1,0 +1,76 @@
+---
+export interface Props {
+  currentPillar?: string;
+  onPillarChange?: (pillar: string) => void;
+}
+
+const { currentPillar = 'all', onPillarChange } = Astro.props;
+
+const pillars = [
+  { id: 'all', name: 'All Content', icon: '📚', color: 'gray' },
+  { id: 'ai-insights', name: 'AI Insights', icon: '🤖', color: 'green' },
+  { id: 'architecture', name: 'Architecture', icon: '🏗️', color: 'blue' },
+  { id: 'philosophy', name: 'Philosophy', icon: '🧠', color: 'purple' },
+  { id: 'thinking-logs', name: 'Thinking Logs', icon: '📝', color: 'gray' }
+];
+---
+
+<div class="mb-8">
+  <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+    Content Pillars
+  </h2>
+  
+  <div class="flex flex-wrap gap-2">
+    {pillars.map(pillar => (
+      <button
+        class={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
+          currentPillar === pillar.id
+            ? `bg-${pillar.color}-100 dark:bg-${pillar.color}-900/30 border-${pillar.color}-300 dark:border-${pillar.color}-700 text-${pillar.color}-800 dark:text-${pillar.color}-200`
+            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+        }`}
+        data-pillar={pillar.id}
+      >
+        <span class="mr-2">{pillar.icon}</span>
+        {pillar.name}
+      </button>
+  </div>
+</div>
+
+<script>
+  // Handle pillar filtering
+  document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('[data-pillar]');
+    
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        const pillar = this.getAttribute('data-pillar');
+        
+        // Update active state
+        buttons.forEach(btn => {
+          btn.classList.remove('bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-700', 'text-green-800', 'dark:text-green-200');
+          btn.classList.add('bg-white', 'dark:bg-gray-800', 'border-gray-200', 'dark:border-gray-700', 'text-gray-700', 'dark:text-gray-300');
+        });
+        
+        this.classList.remove('bg-white', 'dark:bg-gray-800', 'border-gray-200', 'dark:border-gray-700', 'text-gray-700', 'dark:text-gray-300');
+        this.classList.add('bg-green-100', 'dark:bg-green-900/30', 'border-green-300', 'dark:border-green-700', 'text-green-800', 'dark:text-green-200');
+        
+        // Filter content
+        filterContentByPillar(pillar);
+      });
+    });
+    
+    function filterContentByPillar(pillar) {
+      const contentItems = document.querySelectorAll('[data-content-pillar]');
+      
+      contentItems.forEach(item => {
+        const itemPillar = item.getAttribute('data-content-pillar');
+        
+        if (pillar === 'all' || itemPillar === pillar) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  });
+</script>

@@ -1,0 +1,74 @@
+---
+import ContentPillar from './ContentPillar.astro';
+import PillarFilter from './PillarFilter.astro';
+
+export interface Props {
+  posts: any[];
+  currentPillar?: string;
+}
+
+const { posts, currentPillar = 'all' } = Astro.props;
+
+// Group posts by pillar
+const groupedPosts = posts.reduce((acc, post) => {
+  const pillar = post.data.content_pillar || 'ai-insights';
+  if (!acc[pillar]) acc[pillar] = [];
+  acc[pillar].push(post);
+  return acc;
+}, {});
+
+const pillarOrder = ['ai-insights', 'architecture', 'philosophy', 'thinking-logs'];
+---
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <!-- Pillar Filter -->
+  <PillarFilter currentPillar={currentPillar} />
+  
+  <!-- Content by Pillar -->
+  <div class="space-y-12">
+    {pillarOrder.map(pillar => {
+      const pillarPosts = groupedPosts[pillar] || [];
+      if (pillarPosts.length === 0) return null;
+      
+      return (
+        <section class="pillar-section" data-pillar={pillar}>
+          <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+            {pillar.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          </h2>
+          
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {pillarPosts.map(post => (
+              <div data-content-pillar={pillar}>
+                <ContentPillar
+                  pillar={pillar}
+                  title={post.data.title}
+                  description={post.data.description}
+                  date={post.data.pubDatetime}
+                  tags={post.data.tags || []}
+                >
+                  <div class="prose prose-sm max-w-none">
+                    <p>{post.data.description}</p>
+                  </div>
+                </ContentPillar>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .pillar-section {
+    transition: opacity 0.3s ease;
+  }
+  
+  .pillar-section[data-pillar]:not([data-pillar="all"]) {
+    opacity: 0.7;
+  }
+  
+  .pillar-section[data-pillar="all"] {
+    opacity: 1;
+  }
+</style>

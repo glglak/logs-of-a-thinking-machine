@@ -1,0 +1,86 @@
+---
+export interface Props {
+  pillar: 'ai-insights' | 'architecture' | 'philosophy' | 'thinking-logs';
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  children?: any;
+}
+
+const { pillar, title, description, date, tags, children } = Astro.props;
+
+const pillarConfig = {
+  'ai-insights': {
+    color: 'green',
+    icon: '🤖',
+    bgClass: 'bg-green-50 dark:bg-green-900/20',
+    borderClass: 'border-green-200 dark:border-green-800',
+    textClass: 'text-green-800 dark:text-green-200',
+    accentClass: 'text-green-600 dark:text-green-400'
+  },
+  'architecture': {
+    color: 'blue',
+    icon: '🏗️',
+    bgClass: 'bg-blue-50 dark:bg-blue-900/20',
+    borderClass: 'border-blue-200 dark:border-blue-800',
+    textClass: 'text-blue-800 dark:text-blue-200',
+    accentClass: 'text-blue-600 dark:text-blue-400'
+  },
+  'philosophy': {
+    color: 'purple',
+    icon: '🧠',
+    bgClass: 'bg-purple-50 dark:bg-purple-900/20',
+    borderClass: 'border-purple-200 dark:border-purple-800',
+    textClass: 'text-purple-800 dark:text-purple-200',
+    accentClass: 'text-purple-600 dark:text-purple-400'
+  },
+  'thinking-logs': {
+    color: 'gray',
+    icon: '📝',
+    bgClass: 'bg-gray-50 dark:bg-gray-900/20',
+    borderClass: 'border-gray-200 dark:border-gray-800',
+    textClass: 'text-gray-800 dark:text-gray-200',
+    accentClass: 'text-gray-600 dark:text-gray-400'
+  }
+};
+
+const config = pillarConfig[pillar];
+---
+
+<div class={`rounded-lg p-6 border-2 ${config.bgClass} ${config.borderClass}`}>
+  <!-- Pillar Header -->
+  <div class="flex items-center gap-3 mb-4">
+    <span class="text-2xl">{config.icon}</span>
+    <div>
+      <h3 class={`text-lg font-semibold ${config.textClass}`}>
+        {title}
+      </h3>
+      <p class={`text-sm ${config.accentClass}`}>
+        {pillar.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+      </p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class={`prose prose-sm max-w-none ${config.textClass}`}>
+    <p class="mb-4">{description}</p>
+    <slot />
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-4 pt-4 border-t border-current/20">
+    <div class="flex items-center justify-between text-xs">
+      <span class={config.accentClass}>
+        {date.toLocaleDateString()}
+      </span>
+      <div class="flex gap-2">
+        {tags.map(tag => (
+          <span class={`px-2 py-1 rounded text-xs ${config.accentClass} bg-current/10`}>
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>

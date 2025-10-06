@@ -21,6 +21,11 @@ const blog = defineCollection({
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),
       timezone: z.string().optional(),
+      // NEW: Philosophical analysis fields
+      content_pillar: z.enum(["ai-insights", "architecture", "philosophy"]).optional(),
+      content_type: z.string().optional(),
+      source_url: z.string().optional(),
+      source_name: z.string().optional(),
     }),
 });
 
