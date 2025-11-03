@@ -1,0 +1,50 @@
+name: AI Brief (Daily)
+
+on:
+  schedule:
+    # 06:15 UTC = 08:15 Africa/Cairo
+    - cron: "15 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      PPLX_API_KEY: ${{ secrets.PPLX_API_KEY }}
+      NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+      VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+      TZ: Africa/Cairo
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps for script (none needed)
+        run: |
+          npm -v
+          node -v
+
+      - name: Run generator
+        run: node scripts/ai-brief.mjs
+
+      - name: Commit & push if changed
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: add daily AI brief"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+
+      - name: Trigger Vercel deploy
+        if: ${{ env.VERCEL_DEPLOY_HOOK != '' }}
+        run: curl -fsSL -X POST "$VERCEL_DEPLOY_HOOK"
