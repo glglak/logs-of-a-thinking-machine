@@ -25,7 +25,9 @@ function absUrl(candidate, base) {
     if (!candidate) return "";
     if (candidate.startsWith("//")) return "https:" + candidate;
     return new URL(candidate, base).href;
-  } catch { return candidate || ""; }
+  } catch {
+    return candidate || "";
+  }
 }
 function ytThumb(u) {
   try {
@@ -41,8 +43,12 @@ function ytThumb(u) {
   } catch {}
   return "";
 }
-function thum(u) { return `https://image.thum.io/get/width/1200/${u}`; }
-function mshot(u) { return `https://s.wordpress.com/mshots/v1/${encodeURIComponent(u)}?w=1200`; }
+function thum(u) {
+  return `https://image.thum.io/get/width/1200/${u}`;
+}
+function mshot(u) {
+  return `https://s.wordpress.com/mshots/v1/${encodeURIComponent(u)}?w=1200`;
+}
 
 async function fetchHtml(url) {
   try {
@@ -51,7 +57,9 @@ async function fetchHtml(url) {
     const ct = r.headers.get("content-type") || "";
     if (!/text\/html|application\/xhtml\+xml/i.test(ct)) return "";
     return await r.text();
-  } catch { return ""; }
+  } catch {
+    return "";
+  }
 }
 function extractOg(html, base) {
   if (!html) return "";
@@ -59,7 +67,7 @@ function extractOg(html, base) {
     /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i,
     /<meta[^>]+name=["']og:image["'][^>]+content=["']([^"']+)["']/i,
     /<meta[^>]+property=["']twitter:image(?::src)?["'][^>]+content=["']([^"']+)["']/i,
-    /<meta[^>]+name=["']twitter:image(?::src)?["'][^>]+content=["']([^"']+)["']/i
+    /<meta[^>]+name=["']twitter:image(?::src)?["'][^>]+content=["']([^"']+)["']/i,
   ];
   for (const re of reList) {
     const m = re.exec(html);
@@ -68,26 +76,59 @@ function extractOg(html, base) {
   return "";
 }
 
-function makeMd({ title, iso, description, heroUrl, short, long, url, source }) {
+// ------------ Markdown Builder ------------
+function makeMd({
+  title,
+  iso,
+  description,
+  heroUrl,
+  short,
+  long,
+  url,
+  source,
+  architectural_insight = "",
+  philosophical_angle = "",
+  human_impact = "",
+  thinking_questions = [],
+}) {
   const titleSafe = title.replace(/"/g, '\\"');
   const descSafe = (description || title).slice(0, 140).replace(/"/g, '\\"');
 
-  const heroFM = heroUrl ? `heroImage: "${heroUrl}"
+  const heroFM = heroUrl
+    ? `heroImage: "${heroUrl}"
 ogImage: "${heroUrl}"
-` : "";
+`
+    : "";
 
   const heroBlock = heroUrl ? `![${titleSafe}](${heroUrl})\n\n` : "";
 
+  const questionsBlock =
+    Array.isArray(thinking_questions) && thinking_questions.length
+      ? `## Thinking Questions\n${thinking_questions.map((q) => `- ${q}`).join("\n")}\n\n`
+      : "";
+
+  // ✅ use !!timestamp to make Astro treat as date, not string
   return `---
 title: "${titleSafe}"
-pubDatetime: ${iso}
+pubDatetime: !!timestamp ${iso}
 description: "${descSafe}"
 ${heroFM}tags: ${JSON.stringify(TAGS)}
 ---
 
 ${heroBlock}> ${short}
 
-${long ? `${long}\n\n` : ""}**Source:** ${url}${source ? ` *${source}*` : ""}
+${long ? `${long}\n\n` : ""}
+
+## Architectural Insight
+${architectural_insight}
+
+## Philosophical Angle
+${philosophical_angle}
+
+## Human Impact
+${human_impact}
+
+${questionsBlock}**Source:** [${title}](${url})${source ? ` *${source}*` : ""}
 `;
 }
 
@@ -121,46 +162,57 @@ async function fetchPerplexity() {
                 type: "object",
                 additionalProperties: false,
                 properties: {
-                  title:  { type: "string" },
-                  url:    { type: "string", format: "uri" },
+                  title: { type: "string" },
+                  url: { type: "string", format: "uri" },
                   source: { type: "string" },
-                  image:  { type: "string" },
-                  short:  { type: "string", maxLength: 140 },
-                  long:   { type: "string", maxLength: 900 }
+                  image: { type: "string" },
+                  short: { type: "string", maxLength: 140 },
+                  long: { type: "string", maxLength: 900 },
                 },
-                required: ["title","url","short","long"]
-              }
-            }
+                required: ["title", "url", "short", "long"],
+              },
+            },
           },
-          required: ["items"]
-        }
-      }
+          required: ["items"],
+        },
+      },
     },
     messages: [
-      { role: "system", content: "You are a precise AI/LLM news editor. Neutral tone. No fluff." },
-      { role: "user", content:
-        "From the last 24h, return 3 credible AI/LLM items. For each: title, url, source, image (og:image if confident or empty), short (<=140 chars), long (2–3 tight paragraphs, 200–350 words total). JSON only." }
-    ]
+      {
+        role: "system",
+        content:
+          "You are a precise AI/LLM news editor. Neutral tone. No fluff.",
+      },
+      {
+        role: "user",
+        content:
+          "From the last 24h, return 3 credible AI/LLM items. For each: title, url, source, image (og:image if confident or empty), short (<=140 chars), long (2–3 tight paragraphs, 200–350 words total). JSON only.",
+      },
+    ],
   };
 
   const r = await fetch("https://api.perplexity.ai/chat/completions", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${key}`,
-      "Content-Type": "application/json"
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
 
   if (!r.ok) throw new Error(`Perplexity ${r.status}`);
   const data = await r.json();
 
-  // PPLX JSON-mode puts payload at choices[0].message.content
   let parsed;
-  try { parsed = JSON.parse(data.choices?.[0]?.message?.content ?? "{}"); }
-  catch { throw new Error("Perplexity JSON parse failed"); }
+  try {
+    parsed = JSON.parse(data.choices?.[0]?.message?.content ?? "{}");
+  } catch {
+    throw new Error("Perplexity JSON parse failed");
+  }
 
-  const items = Array.isArray(parsed.items) ? parsed.items.slice(0, MAX_ITEMS) : [];
+  const items = Array.isArray(parsed.items)
+    ? parsed.items.slice(0, MAX_ITEMS)
+    : [];
   return items.length ? items : null;
 }
 
@@ -176,13 +228,13 @@ async function fetchNewsApi() {
   if (!r.ok) throw new Error(`NewsAPI ${r.status}`);
   const data = await r.json();
   const arts = Array.isArray(data.articles) ? data.articles : [];
-  return arts.slice(0, MAX_ITEMS).map(a => ({
+  return arts.slice(0, MAX_ITEMS).map((a) => ({
     title: a.title || "",
     url: a.url || "",
     source: a.source?.name || "",
     image: a.urlToImage || "",
     short: (a.description || "").slice(0, 140),
-    long: (a.content || a.description || "").replace(/\s+/g, " ").slice(0, 800)
+    long: (a.content || a.description || "").replace(/\s+/g, " ").slice(0, 800),
   }));
 }
 
@@ -191,7 +243,11 @@ async function fetchNewsApi() {
   await ensureDir(OUT_DIR);
 
   let items = null;
-  try { items = await fetchPerplexity(); } catch (e) { console.error(e); }
+  try {
+    items = await fetchPerplexity();
+  } catch (e) {
+    console.error(e);
+  }
   if (!items) {
     console.log("Falling back to NewsAPI…");
     items = await fetchNewsApi();
@@ -201,17 +257,19 @@ async function fetchNewsApi() {
     process.exit(0);
   }
 
-  // de-dup by URL/title and trim to MAX_ITEMS
   const seen = new Set();
   const uniq = [];
   for (const it of items) {
     const key = (it.url || it.title || "").toLowerCase();
-    if (key && !seen.has(key)) { seen.add(key); uniq.push(it); }
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      uniq.push(it);
+    }
     if (uniq.length === MAX_ITEMS) break;
   }
 
   for (const it of uniq) {
-    const { d, iso, ymd, hhmmss, ms, rand } = nowParts();
+    const { iso, ymd, hhmmss, ms, rand } = nowParts();
     const url = (it.url || "").trim();
     const source = (it.source || "").trim();
     const title = (it.title || "AI Update").trim();
@@ -219,7 +277,6 @@ async function fetchNewsApi() {
     const long = (it.long || "").trim();
     const givenImg = (it.image || "").trim();
 
-    // arXiv PDF preview fix → use abs page
     let previewUrl = url;
     const mPdf = url.match(/arxiv\.org\/pdf\/(.+?)\.pdf(?:$|[?#])/i);
     if (mPdf) previewUrl = `https://arxiv.org/abs/${mPdf[1]}`;
@@ -240,7 +297,17 @@ async function fetchNewsApi() {
       short,
       long,
       url: previewUrl,
-      source
+      source,
+      architectural_insight:
+        "This reflects emerging architectural shifts in AI pipelines — more composable, context-aware, and capable of self-evaluation.",
+      philosophical_angle:
+        "It hints at a deeper philosophical question: are we building systems that think, or systems that mirror our own thinking patterns?",
+      human_impact:
+        "For people, this means AI is becoming not just a tool, but a collaborator — augmenting human reasoning rather than replacing it.",
+      thinking_questions: [
+        "When does assistance become autonomy?",
+        "How do we measure 'understanding' in an artificial system?",
+      ],
     });
 
     const slug = slugify(title);
