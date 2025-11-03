@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PPLX_API_KEY: ${{ secrets.PPLX_API_KEY }}
-      NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
       VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
       TZ: Africa/Cairo
     steps:
