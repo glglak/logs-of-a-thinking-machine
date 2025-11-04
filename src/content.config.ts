@@ -26,7 +26,7 @@ const blog = defineCollection({
       content_type: z.string().optional(),
       source_url: z.string().optional(),
       source_name: z.string().optional(),
-    }).strict(false), // Allow additional fields for backward compatibility
+    }), // Allow additional fields for backward compatibility
 });
 
 export const collections = { blog };
