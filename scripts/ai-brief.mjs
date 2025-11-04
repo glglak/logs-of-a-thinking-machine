@@ -110,7 +110,7 @@ ogImage: "${heroUrl}"
   // ✅ use !!timestamp to make Astro treat as date, not string
   return `---
 title: "${titleSafe}"
-pubDatetime: !!timestamp ${iso}
+pubDatetime: "${iso}"
 description: "${descSafe}"
 ${heroFM}tags: ${JSON.stringify(TAGS)}
 ---
