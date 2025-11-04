@@ -1,7 +1,7 @@
 ---
 type PillarKey = keyof typeof pillarConfig;
 export interface Props {
-  pillar: PillarKey;
+  pillar: PillarKey | string;
   title: string;
   description: string;
   date: Date;
