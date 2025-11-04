@@ -1,7 +1,8 @@
 ---
 type PillarKey = keyof typeof pillarConfig;
+
 export interface Props {
-  pillar: PillarKey | string;
+  pillar?: string;        // allow any string (dynamic from CMS)
   title: string;
   description: string;
   date: Date;
@@ -44,16 +45,14 @@ const pillarConfig = {
     textClass: 'text-gray-800 dark:text-gray-200',
     accentClass: 'text-gray-600 dark:text-gray-400'
   }
-};
+} as const;
 
-const config = pillarConfig[pillar] || {
-  color: 'gray',
-  icon: '📄',
-  bgClass: 'bg-gray-50 dark:bg-gray-900/20',
-  borderClass: 'border-gray-200 dark:border-gray-800',
-  textClass: 'text-gray-800 dark:text-gray-200',
-  accentClass: 'text-gray-600 dark:text-gray-400'
-};
+// ✅ SAFE ACCESS with fallback
+const key = (pillar && pillar in pillarConfig
+  ? (pillar as PillarKey)
+  : 'ai-insights') satisfies PillarKey;
+
+const config = pillarConfig[key];
 ---
 
 <div class={`rounded-lg p-6 border-2 ${config.bgClass} ${config.borderClass}`}>
@@ -65,7 +64,9 @@ const config = pillarConfig[pillar] || {
         {title}
       </h3>
       <p class={`text-sm ${config.accentClass}`}>
-        {pillar.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+        {(pillar || 'ai-insights')
+          .replace('-', ' ')
+          .replace(/\b\w/g, l => l.toUpperCase())}
       </p>
     </div>
   </div>
