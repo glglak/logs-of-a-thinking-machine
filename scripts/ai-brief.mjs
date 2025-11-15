@@ -2,15 +2,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-// ------------ config ------------
 const OUT_DIR = "src/data/blog";
-const TAGS = ["AI", "digest"];
 const MAX_ITEMS = 3;
+const TAGS = ["AI", "digest"];
 
-// ------------ helpers ------------
 function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
+
 function nowParts() {
   const d = new Date();
   const iso = d.toISOString();
@@ -20,6 +19,7 @@ function nowParts() {
   const rand = Math.random().toString(36).slice(2, 6);
   return { d, iso, ymd, hhmmss, ms, rand };
 }
+
 function absUrl(candidate, base) {
   try {
     if (!candidate) return "";
@@ -29,6 +29,7 @@ function absUrl(candidate, base) {
     return candidate || "";
   }
 }
+
 function ytThumb(u) {
   try {
     const U = new URL(u);
@@ -43,6 +44,7 @@ function ytThumb(u) {
   } catch {}
   return "";
 }
+
 function thum(u) {
   return `https://image.thum.io/get/width/1200/${u}`;
 }
@@ -61,6 +63,7 @@ async function fetchHtml(url) {
     return "";
   }
 }
+
 function extractOg(html, base) {
   if (!html) return "";
   const reList = [
@@ -76,59 +79,24 @@ function extractOg(html, base) {
   return "";
 }
 
-// ------------ Markdown Builder ------------
-function makeMd({
-  title,
-  iso,
-  description,
-  heroUrl,
-  short,
-  long,
-  url,
-  source,
-  architectural_insight = "",
-  philosophical_angle = "",
-  human_impact = "",
-  thinking_questions = [],
-}) {
+function makeMd({ title, iso, description, heroUrl, short, long, url, source }) {
   const titleSafe = title.replace(/"/g, '\\"');
   const descSafe = (description || title).slice(0, 140).replace(/"/g, '\\"');
-
   const heroFM = heroUrl
-    ? `heroImage: "${heroUrl}"
-ogImage: "${heroUrl}"
-`
+    ? `heroImage: "${heroUrl}"\nogImage: "${heroUrl}"\n`
     : "";
-
   const heroBlock = heroUrl ? `![${titleSafe}](${heroUrl})\n\n` : "";
 
-  const questionsBlock =
-    Array.isArray(thinking_questions) && thinking_questions.length
-      ? `## Thinking Questions\n${thinking_questions.map((q) => `- ${q}`).join("\n")}\n\n`
-      : "";
-
-  // ✅ use !!timestamp to make Astro treat as date, not string
   return `---
 title: "${titleSafe}"
-pubDatetime: "${iso}"
+pubDatetime: ${iso}
 description: "${descSafe}"
 ${heroFM}tags: ${JSON.stringify(TAGS)}
 ---
 
 ${heroBlock}> ${short}
 
-${long ? `${long}\n\n` : ""}
-
-## Architectural Insight
-${architectural_insight}
-
-## Philosophical Angle
-${philosophical_angle}
-
-## Human Impact
-${human_impact}
-
-${questionsBlock}**Source:** [${title}](${url})${source ? ` *${source}*` : ""}
+${long ? `${long}\n\n` : ""}**Source:** [${source || url}](${url})
 `;
 }
 
@@ -136,7 +104,7 @@ async function ensureDir(p) {
   await fs.mkdir(p, { recursive: true });
 }
 
-// ------------ data sources ------------
+// --------------- Perplexity Fetch ---------------
 async function fetchPerplexity() {
   const key = process.env.PPLX_API_KEY;
   if (!key) return null;
@@ -144,38 +112,29 @@ async function fetchPerplexity() {
   const body = {
     model: "sonar",
     search_recency_filter: "day",
-    max_tokens: 1200,
+    max_tokens: 1500,
     response_format: {
       type: "json_schema",
       json_schema: {
-        name: "ai_digest_items",
+        name: "ai_digest",
         strict: true,
         schema: {
           type: "object",
-          additionalProperties: false,
           properties: {
             items: {
               type: "array",
-              minItems: MAX_ITEMS,
               maxItems: MAX_ITEMS,
               items: {
                 type: "object",
-                additionalProperties: false,
                 properties: {
-                            title: { type: "string" },
-                            url: { type: "string", format: "uri" },
-                            source: { type: "string" },
-                            image: { type: "string" },
-                            short: { type: "string", maxLength: 140 },
-                            long: { type: "string", maxLength: 900 },
-                            architectural_insight: { type: "string" },
-                            philosophical_angle: { type: "string" },
-                            human_impact: { type: "string" },
-                            content_pillar: { type: "string" },
-                            tags: { type: "array", items: { type: "string" } },
-                            thinking_questions: { type: "array", items: { type: "string" } }
-                          },
-                 required: ["title","url","short","long"],
+                  title: { type: "string" },
+                  url: { type: "string" },
+                  source: { type: "string" },
+                  image: { type: "string" },
+                  short: { type: "string" },
+                  long: { type: "string" },
+                },
+                required: ["title", "url", "short", "long"],
               },
             },
           },
@@ -187,12 +146,12 @@ async function fetchPerplexity() {
       {
         role: "system",
         content:
-          "You are a precise AI/LLM news editor. Neutral tone. No fluff.",
+          "You are a concise AI news editor. Write human-readable summaries without filler or clickbait.",
       },
       {
         role: "user",
         content:
-          "From the last 24h, return 3 credible AI/LLM items. For each: title, url, source, image (og:image if confident or empty), short (<=140 chars), long (2–3 tight paragraphs, 200–350 words total). JSON only.",
+          "Summarize the 3 most interesting AI or LLM developments from the past 24h. Each item: title, url, source, short (≤140 chars), long (2–3 paragraphs, ~300 words). Output JSON only.",
       },
     ],
   };
@@ -222,59 +181,23 @@ async function fetchPerplexity() {
   return items.length ? items : null;
 }
 
-async function fetchNewsApi() {
-  const key = process.env.NEWSAPI_KEY;
-  if (!key) return null;
-  const q = encodeURIComponent(
-    '("artificial intelligence" OR "LLM" OR "large language model" OR "generative AI" OR "transformer" OR "multimodal" OR "agentic") NOT (football OR soccer OR NBA OR MLB OR NFL OR tennis OR cricket OR celebrity OR gossip OR gaming)'
-  );
-  const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=10&apiKey=${key}`;
-
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`NewsAPI ${r.status}`);
-  const data = await r.json();
-  const arts = Array.isArray(data.articles) ? data.articles : [];
-  return arts.slice(0, MAX_ITEMS).map((a) => ({
-    title: a.title || "",
-    url: a.url || "",
-    source: a.source?.name || "",
-    image: a.urlToImage || "",
-    short: (a.description || "").slice(0, 140),
-    long: (a.content || a.description || "").replace(/\s+/g, " ").slice(0, 800),
-  }));
-}
-
-// ------------ main ------------
+// ----------------- MAIN -----------------
 (async () => {
   await ensureDir(OUT_DIR);
 
-  let items = null;
+  let items;
   try {
     items = await fetchPerplexity();
   } catch (e) {
-    console.error(e);
+    console.error("Perplexity error:", e);
   }
-  if (!items) {
-    console.log("Falling back to NewsAPI…");
-    items = await fetchNewsApi();
-  }
-  if (!items || !items.length) {
+
+  if (!items?.length) {
     console.log("No items found; exiting.");
     process.exit(0);
   }
 
-  const seen = new Set();
-  const uniq = [];
   for (const it of items) {
-    const key = (it.url || it.title || "").toLowerCase();
-    if (key && !seen.has(key)) {
-      seen.add(key);
-      uniq.push(it);
-    }
-    if (uniq.length === MAX_ITEMS) break;
-  }
-
-  for (const it of uniq) {
     const { iso, ymd, hhmmss, ms, rand } = nowParts();
     const url = (it.url || "").trim();
     const source = (it.source || "").trim();
@@ -283,17 +206,14 @@ async function fetchNewsApi() {
     const long = (it.long || "").trim();
     const givenImg = (it.image || "").trim();
 
-    let previewUrl = url;
-    const mPdf = url.match(/arxiv\.org\/pdf\/(.+?)\.pdf(?:$|[?#])/i);
-    if (mPdf) previewUrl = `https://arxiv.org/abs/${mPdf[1]}`;
-
-    const html = await fetchHtml(previewUrl);
+    // try to find a good preview image
+    const html = await fetchHtml(url);
     let heroUrl = "";
     if (/^https?:\/\//.test(givenImg)) heroUrl = givenImg;
-    if (!heroUrl && html) heroUrl = extractOg(html, previewUrl);
-    if (!heroUrl) heroUrl = ytThumb(previewUrl);
-    if (!heroUrl && previewUrl) heroUrl = thum(previewUrl);
-    if (!heroUrl && previewUrl) heroUrl = mshot(previewUrl);
+    if (!heroUrl && html) heroUrl = extractOg(html, url);
+    if (!heroUrl) heroUrl = ytThumb(url);
+    if (!heroUrl && url) heroUrl = thum(url);
+    if (!heroUrl && url) heroUrl = mshot(url);
 
     const md = makeMd({
       title,
@@ -302,24 +222,14 @@ async function fetchNewsApi() {
       heroUrl,
       short,
       long,
-      url: previewUrl,
+      url,
       source,
-      architectural_insight:
-        "This reflects emerging architectural shifts in AI pipelines — more composable, context-aware, and capable of self-evaluation.",
-      philosophical_angle:
-        "It hints at a deeper philosophical question: are we building systems that think, or systems that mirror our own thinking patterns?",
-      human_impact:
-        "For people, this means AI is becoming not just a tool, but a collaborator — augmenting human reasoning rather than replacing it.",
-      thinking_questions: [
-        "When does assistance become autonomy?",
-        "How do we measure 'understanding' in an artificial system?",
-      ],
     });
 
     const slug = slugify(title);
     const filename = `${ymd}-${slug}-${hhmmss}-${ms}-${rand}.md`;
     const outPath = path.join(OUT_DIR, filename);
     await fs.writeFile(outPath, md, "utf8");
-    console.log("Wrote", outPath);
+    console.log("📝 Wrote", outPath);
   }
 })();
