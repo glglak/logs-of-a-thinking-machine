@@ -31,7 +31,7 @@ const {
 // Ensure canonical URL uses the correct domain
 const baseURL = Astro.site || new URL(SITE.website);
 const finalCanonicalURL = canonicalURL 
-  ? new URL(canonicalURL.pathname || canonicalURL, baseURL)
+  ? new URL(canonicalURL, baseURL)
   : new URL(Astro.url.pathname, baseURL);
 
 const socialImageURL = new URL(ogImage, baseURL);

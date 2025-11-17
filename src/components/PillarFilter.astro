@@ -1,10 +1,9 @@
 ---
 export interface Props {
   currentPillar?: string;
-  onPillarChange?: (pillar: string) => void;
 }
 
-const { currentPillar = 'all', onPillarChange } = Astro.props;
+const { currentPillar = 'all' } = Astro.props;
 
 const pillars = [
   { id: 'all', name: 'All Content', icon: '📚', color: 'gray' },
