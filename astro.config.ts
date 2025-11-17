@@ -17,6 +17,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
+      // Sitemap will automatically discover all pages from src/pages/
+      // Blog posts are discovered from content collections
     }),
   ],
   markdown: {

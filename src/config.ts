@@ -1,5 +1,5 @@
 export const SITE = {
-  website: "https://logs-of-a-thinking-machine.vercel.app/",
+  website: "https://logsofthinkingmachine.com/",
   author: "Karim Deraz",
   profile: "https://www.linkedin.com/in/karimderaz/",
   desc: "Where architecture meets AI and philosophy. Byte-sized thoughts from a thinking machine exploring the intersection of technology, humanity, and the stories we tell ourselves in code.",
