@@ -6,7 +6,7 @@ export const SITE = {
   title: "Logs of a Thinking Machine",
   ogImage: "logs-of-a-thinking-machine-og.jpg",
   lightAndDarkMode: true,
-  postPerIndex: 6, // Better for dev.to style
+  postPerIndex: 20, // Show more posts on homepage
   postPerPage: 12,
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
   showArchives: false,

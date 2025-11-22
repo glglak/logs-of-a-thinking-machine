@@ -3,10 +3,24 @@ import { getCollection } from "astro:content";
 import DevLayout from "@/layouts/DevLayout.astro";
 import Tag from "@/components/Tag.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
+import getPostsByTag from "@/utils/getPostsByTag";
 import { SITE } from "@/config";
 
-const posts = await getCollection("blog");
-let tags = getUniqueTags(posts);
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+const uniqueTags = getUniqueTags(posts);
+
+// Add counts to tags
+const tagsWithCounts = uniqueTags.map(({ tag, tagName }) => {
+  const tagPosts = getPostsByTag(posts, tag);
+  return { tag, tagName, count: tagPosts.length };
+});
+
+// Sort by count (most popular first), then alphabetically
+const tags = tagsWithCounts
+  .sort((a, b) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return a.tagName.localeCompare(b.tagName);
+  });
 ---
 
 <DevLayout title={`Tags | ${SITE.title}`} description="All the tags used in posts.">
@@ -18,8 +32,11 @@ let tags = getUniqueTags(posts);
   
   <!-- Tags Grid -->
   <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+      Showing {tags.length} tag{tags.length !== 1 ? 's' : ''} across {posts.length} post{posts.length !== 1 ? 's' : ''}
+    </div>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} />)}
+      {tags.map(({ tag, tagName, count }) => <Tag {tag} {tagName} count={count} />)}
     </div>
   </div>
 </DevLayout>
