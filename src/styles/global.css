@@ -68,6 +68,21 @@ html[data-theme="dark"] {
   scroll-margin-block: 1rem;
 }
 
+/* Image styling */
+img {
+  /* Smooth transition for fallback images */
+  transition: opacity 0.3s ease;
+}
+
+/* Style for fallback images */
+img.broken-image-fallback {
+  opacity: 0.7;
+  border: 2px dashed var(--color-border);
+  border-radius: 8px;
+  padding: 1rem;
+  background: var(--color-muted);
+}
+
 header {
   @apply bg-gradient-to-b from-accent/20 to-background backdrop-blur-sm;
 }

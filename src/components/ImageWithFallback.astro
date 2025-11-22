@@ -1,0 +1,43 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  width?: string | number;
+  height?: string | number;
+  loading?: "lazy" | "eager";
+  fallbackSrc?: string;
+}
+
+const {
+  src,
+  alt,
+  class: className = "",
+  width,
+  height,
+  loading = "lazy",
+  fallbackSrc = "/assets/images/default-image.svg"
+} = Astro.props;
+---
+
+<img
+  src={src}
+  alt={alt}
+  class={className}
+  width={width}
+  height={height}
+  loading={loading}
+  onerror={`this.src='${fallbackSrc}'; this.classList.add('broken-image-fallback'); this.alt='Image failed to load - showing default placeholder';`}
+  data-original-src={src}
+/>
+
+<style>
+  img.broken-image-fallback {
+    opacity: 0.7;
+    border: 2px dashed var(--color-border);
+    border-radius: 8px;
+    padding: 0.5rem;
+    background: var(--color-muted);
+    transition: opacity 0.3s ease;
+  }
+</style>

@@ -156,6 +156,61 @@ const structuredData = {
     <ClientRouter />
 
     <script is:inline src="/toggle-theme.js"></script>
+
+    <script>
+      // Global broken image handler
+      document.addEventListener("DOMContentLoaded", function() {
+        const defaultImageSrc = "/assets/images/default-image.svg";
+
+        function handleBrokenImage(img: HTMLImageElement) {
+          if (img.classList.contains("broken-image-fallback") ||
+              img.src.includes("default-image.svg") ||
+              img.hasAttribute("data-processed")) {
+            return;
+          }
+
+          img.setAttribute("data-processed", "true");
+
+          img.addEventListener("error", function(this: HTMLImageElement) {
+            if (this.src === defaultImageSrc) return;
+
+            this.src = defaultImageSrc;
+            this.classList.add("broken-image-fallback");
+            this.alt = this.alt || "Image failed to load - showing default placeholder";
+            this.title = "Original image failed to load - showing fallback";
+          });
+
+          // Check if image is already broken
+          if (img.complete && img.naturalHeight === 0 && img.src !== defaultImageSrc) {
+            img.dispatchEvent(new Event("error"));
+          }
+        }
+
+        // Process existing images
+        document.querySelectorAll("img").forEach(handleBrokenImage);
+
+        // Handle dynamically added images
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const element = node as Element;
+                if (element.tagName === "IMG") {
+                  handleBrokenImage(element as HTMLImageElement);
+                } else {
+                  element.querySelectorAll?.("img")?.forEach(handleBrokenImage);
+                }
+              }
+            });
+          });
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    </script>
   </head>
   <body>
     <slot />

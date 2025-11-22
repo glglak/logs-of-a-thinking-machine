@@ -2,12 +2,12 @@
 title: "Cavela's AI Agents Transform Manufacturing, Cutting Costs by 35%"
 pubDatetime: 2025-11-20T06:44:37.067Z
 description: "Startup Cavela raises $6.6M to deploy AI agents reducing manufacturing costs by 35%, advancing software's practical AI use."
-heroImage: "https://coaio.com/images/cavela-ai-manufacturing.jpg"
-ogImage: "https://coaio.com/images/cavela-ai-manufacturing.jpg"
+heroImage: "/assets/images/posts/cavela-ai-manufacturing.svg"
+ogImage: "/assets/images/posts/cavela-ai-manufacturing.svg"
 tags: ["AI","digest"]
 ---
 
-![Cavela's AI Agents Transform Manufacturing, Cutting Costs by 35%](https://coaio.com/images/cavela-ai-manufacturing.jpg)
+![Cavela's AI Agents Transform Manufacturing, Cutting Costs by 35%](/assets/images/posts/cavela-ai-manufacturing.svg)
 
 > Startup Cavela raises $6.6M to deploy AI agents reducing manufacturing costs by 35%, advancing software's practical AI use.
 

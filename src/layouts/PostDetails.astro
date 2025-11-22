@@ -268,6 +268,69 @@ const nextPost =
   }
   attachCopyButtons();
 
+  /** Handles broken images by replacing them with a default image */
+  function handleBrokenImages() {
+    const defaultImageSrc = "/assets/images/default-image.svg";
+
+    function processImage(img) {
+      // Skip if already processed or if it's the default image
+      if (img.classList.contains("broken-image-fallback") ||
+          img.src.includes("default-image.svg") ||
+          img.hasAttribute("data-processed")) {
+        return;
+      }
+
+      // Mark as processed to avoid duplicate event listeners
+      img.setAttribute("data-processed", "true");
+
+      img.addEventListener("error", function() {
+        // Prevent infinite loops
+        if (this.src === defaultImageSrc) return;
+
+        // Replace broken image with default
+        this.src = defaultImageSrc;
+        this.classList.add("broken-image-fallback");
+        this.alt = this.alt || "Image failed to load - showing default placeholder";
+        this.title = "Original image failed to load - showing fallback";
+
+        // Log for debugging (optional)
+        console.warn(`Image failed to load: ${this.getAttribute("data-original-src") || this.src}`);
+      });
+
+      // Handle images that might already be broken on page load
+      if (img.complete && img.naturalHeight === 0 && img.src !== defaultImageSrc) {
+        img.dispatchEvent(new Event("error"));
+      }
+    }
+
+    // Process existing images
+    const existingImages = Array.from(document.querySelectorAll("img"));
+    existingImages.forEach(processImage);
+
+    // Handle dynamically added images (e.g., from markdown rendering)
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.tagName === "IMG") {
+              processImage(node);
+            } else {
+              node.querySelectorAll?.("img")?.forEach(processImage);
+            }
+          }
+        });
+      });
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  // Initialize broken image handling
+  handleBrokenImages();
+
   /* Go to page start after page swap */
   document.addEventListener("astro:after-swap", () =>
     window.scrollTo({ left: 0, top: 0, behavior: "instant" })
