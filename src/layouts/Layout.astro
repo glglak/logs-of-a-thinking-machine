@@ -172,14 +172,15 @@ const structuredData = {
 
           img.setAttribute("data-processed", "true");
 
-          img.addEventListener("error", function() {
-            if (this.src === defaultImageSrc) return;
-
-            this.src = defaultImageSrc;
-            this.classList.add("broken-image-fallback");
-            this.alt = this.alt || "Image failed to load - showing default placeholder";
-            this.title = "Original image failed to load - showing fallback";
-          });
+          // Set onerror attribute directly on the image for immediate fallback
+          img.setAttribute("onerror", `
+            if (this.src !== '${defaultImageSrc}') {
+              this.src = '${defaultImageSrc}';
+              this.classList.add('broken-image-fallback');
+              this.alt = this.alt || 'Image failed to load - showing default placeholder';
+              this.title = 'Original image failed to load - showing fallback';
+            }
+          `);
 
           // Check if image is already broken
           if (img.complete && img.naturalHeight === 0 && img.src !== defaultImageSrc) {

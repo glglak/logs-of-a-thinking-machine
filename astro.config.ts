@@ -9,6 +9,7 @@ import {
   transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
+import { remarkImageFallback } from "./src/utils/remarkImageFallback";
 import { SITE } from "./src/config";
 
 // https://astro.build/config
@@ -22,7 +23,7 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
+    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }], remarkImageFallback],
     shikiConfig: {
       // For more themes, visit https://shiki.style/themes
       themes: { light: "min-light", dark: "night-owl" },
