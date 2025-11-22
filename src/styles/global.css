@@ -84,6 +84,11 @@ img.broken-image-fallback {
   filter: grayscale(50%);
 }
 
+/* Hide image container when image fails (for news feed style) */
+.image-container:has(img[style*="display: none"]) {
+  display: none !important;
+}
+
 /* Make broken images more visible with background */
 img[src*="default-image.svg"],
 img.broken-image-fallback {
@@ -92,6 +97,23 @@ img.broken-image-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Consistent theme colors */
+:root {
+  --theme-blue: #1e90ff;
+  --theme-blue-dark: #0066cc;
+  --theme-blue-light: #4da6ff;
+  --theme-gray-50: #f9fafb;
+  --theme-gray-100: #f3f4f6;
+  --theme-gray-200: #e5e7eb;
+  --theme-gray-300: #d1d5db;
+  --theme-gray-400: #9ca3af;
+  --theme-gray-500: #6b7280;
+  --theme-gray-600: #4b5563;
+  --theme-gray-700: #374151;
+  --theme-gray-800: #1f2937;
+  --theme-gray-900: #111827;
 }
 
 header {

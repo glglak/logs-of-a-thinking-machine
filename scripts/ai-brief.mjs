@@ -4,7 +4,8 @@ import path from "node:path";
 
 const OUT_DIR = "src/data/blog";
 const MAX_ITEMS = 3;
-const TAGS = ["AI", "digest"];
+// Default tags - will be enhanced by LLM
+const DEFAULT_TAGS = ["AI", "digest"];
 
 function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -79,19 +80,26 @@ function extractOg(html, base) {
   return "";
 }
 
-function makeMd({ title, iso, description, heroUrl, short, long, url, source }) {
+function makeMd({ title, iso, description, heroUrl, short, long, url, source, tags, category }) {
   const titleSafe = title.replace(/"/g, '\\"');
   const descSafe = (description || title).slice(0, 140).replace(/"/g, '\\"');
   const heroFM = heroUrl
     ? `heroImage: "${heroUrl}"\nogImage: "${heroUrl}"\n`
     : "";
   const heroBlock = heroUrl ? `![${titleSafe}](${heroUrl})\n\n` : "";
+  
+  // Use provided tags or fallback to defaults, ensure "AI" and "digest" are included
+  const finalTags = Array.isArray(tags) && tags.length > 0 
+    ? [...new Set([...tags, "AI", "digest"])] // Ensure AI and digest are always present
+    : DEFAULT_TAGS;
+  
+  const categoryFM = category ? `content_pillar: "${category}"\n` : "";
 
   return `---
 title: "${titleSafe}"
 pubDatetime: ${iso}
 description: "${descSafe}"
-${heroFM}tags: ${JSON.stringify(TAGS)}
+${heroFM}${categoryFM}tags: ${JSON.stringify(finalTags)}
 ---
 
 ${heroBlock}> ${short}
@@ -133,6 +141,16 @@ async function fetchPerplexity() {
                   image: { type: "string" },
                   short: { type: "string" },
                   long: { type: "string" },
+                  tags: { 
+                    type: "array",
+                    items: { type: "string" },
+                    description: "2-5 relevant tags like 'AI', 'LLM', 'hardware', 'startups', 'research', 'enterprise', 'security', 'automation', 'robotics', 'ethics', 'governance', 'open-source', 'cloud', 'data-center', 'chips', 'manufacturing', 'healthcare', 'finance', 'education', 'digest'"
+                  },
+                  category: {
+                    type: "string",
+                    enum: ["research", "industry", "startups", "enterprise", "hardware", "software", "governance", "ethics", "applications"],
+                    description: "Primary category for the article"
+                  },
                 },
                 required: ["title", "url", "short", "long"],
               },
@@ -151,7 +169,16 @@ async function fetchPerplexity() {
       {
         role: "user",
         content:
-          "Summarize the 3 most interesting AI or LLM developments from the past 24h. Each item: title, url, source, short (≤140 chars), long (2–3 paragraphs, ~300 words). Output JSON only.",
+          `Summarize the 3 most interesting AI or LLM developments from the past 24h. Each item must include:
+- title: Clear, descriptive title
+- url: Source URL
+- source: Source name/domain
+- short: ≤140 character summary
+- long: 2–3 paragraphs (~300 words) with context
+- tags: Array of 2-5 relevant tags from: AI, LLM, hardware, startups, research, enterprise, security, automation, robotics, ethics, governance, open-source, cloud, data-center, chips, manufacturing, healthcare, finance, education, digest, philosophy, architecture, software-engineering
+- category: One of: research, industry, startups, enterprise, hardware, software, governance, ethics, applications
+
+Focus on diverse topics and use varied, specific tags. Output JSON only.`,
       },
     ],
   };
@@ -224,6 +251,8 @@ async function fetchPerplexity() {
       long,
       url,
       source,
+      tags: it.tags || [],
+      category: it.category || "",
     });
 
     const slug = slugify(title);
