@@ -7,7 +7,7 @@ ogImage: "/assets/images/posts/cavela-ai-manufacturing.svg"
 tags: ["AI","digest"]
 ---
 
-![Cavela's AI Agents Transform Manufacturing, Cutting Costs by 35%](/assets/images/posts/cavela-ai-manufacturing.svg)
+![Cavela's AI Agents Transform Manufacturing, Cutting Costs by 35%](https://datacenter.news/images/ar_data_centre_build.jpg)
 
 > Startup Cavela raises $6.6M to deploy AI agents reducing manufacturing costs by 35%, advancing software's practical AI use.
 

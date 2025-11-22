@@ -157,12 +157,13 @@ const structuredData = {
 
     <script is:inline src="/toggle-theme.js"></script>
 
-    <script>
-      // Global broken image handler
-      document.addEventListener("DOMContentLoaded", function() {
+    <script is:inline>
+      // Global broken image handler - run immediately and on DOMContentLoaded
+      (function() {
+        function initBrokenImageHandler() {
         const defaultImageSrc = "/assets/images/default-image.svg";
 
-        function handleBrokenImage(img: HTMLImageElement) {
+        function handleBrokenImage(img) {
           if (img.classList.contains("broken-image-fallback") ||
               img.src.includes("default-image.svg") ||
               img.hasAttribute("data-processed")) {
@@ -171,7 +172,7 @@ const structuredData = {
 
           img.setAttribute("data-processed", "true");
 
-          img.addEventListener("error", function(this: HTMLImageElement) {
+          img.addEventListener("error", function() {
             if (this.src === defaultImageSrc) return;
 
             this.src = defaultImageSrc;
@@ -194,11 +195,10 @@ const structuredData = {
           mutations.forEach((mutation) => {
             mutation.addedNodes.forEach((node) => {
               if (node.nodeType === Node.ELEMENT_NODE) {
-                const element = node as Element;
-                if (element.tagName === "IMG") {
-                  handleBrokenImage(element as HTMLImageElement);
+                if (node.tagName === "IMG") {
+                  handleBrokenImage(node);
                 } else {
-                  element.querySelectorAll?.("img")?.forEach(handleBrokenImage);
+                  node.querySelectorAll?.("img")?.forEach(handleBrokenImage);
                 }
               }
             });
@@ -209,7 +209,14 @@ const structuredData = {
           childList: true,
           subtree: true
         });
-      });
+        }
+
+        // Run immediately
+        initBrokenImageHandler();
+
+        // Also run on DOMContentLoaded for safety
+        document.addEventListener("DOMContentLoaded", initBrokenImageHandler);
+      })();
     </script>
   </head>
   <body>

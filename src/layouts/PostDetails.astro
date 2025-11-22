@@ -269,7 +269,8 @@ const nextPost =
   attachCopyButtons();
 
   /** Handles broken images by replacing them with a default image */
-  function handleBrokenImages() {
+  (function() {
+    function handleBrokenImages() {
     const defaultImageSrc = "/assets/images/default-image.svg";
 
     function processImage(img) {
@@ -326,10 +327,11 @@ const nextPost =
       childList: true,
       subtree: true
     });
-  }
+    }
 
-  // Initialize broken image handling
-  handleBrokenImages();
+    // Initialize immediately
+    handleBrokenImages();
+  })();
 
   /* Go to page start after page swap */
   document.addEventListener("astro:after-swap", () =>
