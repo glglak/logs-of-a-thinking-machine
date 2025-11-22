@@ -33,12 +33,13 @@ const href = getPath(id, filePath);
   <a href={href} class="block">
     <!-- Hero Image -->
     {heroImage && (
-      <div class="aspect-video w-full overflow-hidden">
+      <div class="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-700">
         <img 
           src={heroImage} 
           alt={title}
           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
+          onerror="if (this.src !== '/assets/images/default-image.svg') { this.src = '/assets/images/default-image.svg'; this.classList.add('broken-image-fallback'); this.alt = this.alt || 'Image failed to load - showing default placeholder'; this.title = 'Original image failed to load - showing fallback'; }"
         />
       </div>
     )}

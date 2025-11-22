@@ -1,7 +1,21 @@
 ---
+import { getCollection } from "astro:content";
+import getUniqueTags from "@/utils/getUniqueTags";
+import getPostsByTag from "@/utils/getPostsByTag";
 import { SITE } from "@/config";
 import LinkButton from "./LinkButton.astro";
 import Socials from "./Socials.astro";
+
+// Get popular tags (top 4 by post count)
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+const tags = getUniqueTags(posts);
+const tagsWithCounts = tags.map(({ tag, tagName }) => {
+  const tagPosts = getPostsByTag(posts, tag);
+  return { tag, tagName, count: tagPosts.length };
+});
+const popularTags = tagsWithCounts
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 4);
 ---
 
 <!-- Sidebar -->
@@ -10,8 +24,13 @@ import Socials from "./Socials.astro";
     <!-- Profile Section -->
     <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
       <div class="flex items-center space-x-4 mb-4">
-        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-sm">
-          <span class="text-white text-2xl font-bold">🎛️</span>
+        <div class="w-16 h-16 rounded-full overflow-hidden shadow-sm border-2 border-blue-600 dark:border-blue-400">
+          <img 
+            src="/assets/images/karimderaz.jfif" 
+            alt={SITE.author}
+            class="w-full h-full object-cover"
+            onerror="if (this.src !== '/assets/images/default-image.svg') { this.src = '/assets/images/default-image.svg'; this.classList.add('broken-image-fallback'); }"
+          />
         </div>
         <div>
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{SITE.author}</h3>
@@ -67,23 +86,21 @@ import Socials from "./Socials.astro";
     </nav>
 
     <!-- Popular Tags -->
-    <div>
-      <h4 class="text-gray-500 dark:text-gray-400 font-medium text-sm uppercase tracking-wider mb-3 px-3">Popular Tags</h4>
-      <div class="flex flex-wrap gap-2 px-3">
-        <a href="/tags/ai" class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800">
-          #AI
-        </a>
-        <a href="/tags/philosophy" class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800">
-          #Philosophy
-        </a>
-        <a href="/tags/technology" class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800">
-          #Tech
-        </a>
-        <a href="/tags/consciousness" class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800">
-          #Mind
-        </a>
+    {popularTags.length > 0 && (
+      <div>
+        <h4 class="text-gray-500 dark:text-gray-400 font-medium text-sm uppercase tracking-wider mb-3 px-3">Popular Tags</h4>
+        <div class="flex flex-wrap gap-2 px-3">
+          {popularTags.map(({ tag, tagName, count }) => (
+            <a 
+              href={`/tags/${tag}/`} 
+              class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800"
+            >
+              #{tagName} <span class="text-xs opacity-75">({count})</span>
+            </a>
+          ))}
+        </div>
       </div>
-    </div>
+    )}
 
     <!-- Quick Actions -->
     <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">

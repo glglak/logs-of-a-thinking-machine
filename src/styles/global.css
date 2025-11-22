@@ -81,6 +81,17 @@ img.broken-image-fallback {
   border-radius: 8px;
   padding: 1rem;
   background: var(--color-muted);
+  filter: grayscale(50%);
+}
+
+/* Make broken images more visible with background */
+img[src*="default-image.svg"],
+img.broken-image-fallback {
+  background: linear-gradient(135deg, var(--color-muted) 0%, var(--color-background) 100%);
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 header {
