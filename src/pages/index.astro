@@ -4,18 +4,28 @@ import DevLayout from "@/layouts/DevLayout.astro";
 import Card from "@/components/Card.astro";
 import { SITE } from "@/config";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const totalPosts = allPosts.length;
+const posts = allPosts
   .sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf())
   .slice(0, SITE.postPerIndex);
 
-console.log("Posts found:", posts.length);
+console.log("Total posts:", totalPosts, "Showing:", posts.length);
 ---
 
 <DevLayout title={SITE.title} description={SITE.desc}>
   <!-- Welcome Section -->
   <div class="mb-8 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{SITE.title}</h1>
-    <p class="text-gray-600 dark:text-gray-300 text-lg">{SITE.desc}</p>
+    <p class="text-gray-600 dark:text-gray-300 text-lg mb-4">{SITE.desc}</p>
+    <div class="flex items-center gap-4 text-sm">
+      <a href="/posts" class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+        <span class="font-semibold">{totalPosts}</span>
+        <span>Posts</span>
+      </a>
+      <span class="text-gray-400">•</span>
+      <span class="text-gray-500 dark:text-gray-400">Updated daily with AI insights</span>
+    </div>
   </div>
   
   <!-- Posts Feed -->

@@ -15,6 +15,10 @@ const totalPosts = allPosts.length;
 const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
 const totalTags = allTags.length;
 
+// Get unique content pillars
+const allPillars = [...new Set(allPosts.map(post => post.data.content_pillar).filter(Boolean))];
+const totalPillars = allPillars.length;
+
 export interface Props {
   title?: string;
   author?: string;
@@ -149,8 +153,8 @@ const {
                 <span class="font-semibold text-blue-600 dark:text-blue-400">{totalPosts}</span>
               </div>
               <div class="flex justify-between items-center">
-                <span class="text-gray-600 dark:text-gray-300">Categories</span>
-                <span class="font-semibold text-blue-600 dark:text-blue-400">3</span>
+                <span class="text-gray-600 dark:text-gray-300">Content Pillars</span>
+                <span class="font-semibold text-blue-600 dark:text-blue-400">{totalPillars}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-600 dark:text-gray-300">Tags</span>
