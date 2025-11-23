@@ -116,6 +116,26 @@ img.broken-image-fallback {
   --theme-gray-900: #111827;
 }
 
+/* Logo styling - ensure proper display */
+header img[src*="logo.png"],
+header .w-10.h-10 img {
+  object-fit: contain !important;
+  object-position: center !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Ensure logo container maintains aspect ratio */
+header .w-10.h-10 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+}
+
 header {
   @apply bg-gradient-to-b from-accent/20 to-background backdrop-blur-sm;
 }
