@@ -34,12 +34,12 @@ const popularTags = tagsWithCounts
 ---
 
 <!-- Sidebar -->
-<aside class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-white dark:bg-gray-900 shadow-sm border-r border-gray-200 dark:border-gray-700 overflow-y-auto z-40 hidden lg:block">
-  <div class="p-6 space-y-6">
+<aside class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-56 bg-white dark:bg-gray-900 shadow-sm border-r border-gray-200 dark:border-gray-700 overflow-y-auto z-40 hidden lg:block">
+  <div class="p-4 space-y-4">
     <!-- Profile Section -->
-    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-      <div class="flex items-center space-x-4 mb-4">
-        <div class="w-16 h-16 rounded-full overflow-hidden shadow-sm border-2 border-blue-600 dark:border-blue-400 flex-shrink-0 bg-gray-200 dark:bg-gray-700">
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+      <div class="flex items-start space-x-3 mb-3">
+        <div class="w-14 h-14 rounded-full overflow-hidden shadow-sm border-2 border-blue-600 dark:border-blue-400 flex-shrink-0 bg-gray-200 dark:bg-gray-700">
           <img 
             src="/assets/images/karimderaz.jfif" 
             alt={SITE.author}
@@ -48,12 +48,12 @@ const popularTags = tagsWithCounts
             onerror="if (this.src !== '/assets/images/default-image.svg') { this.src = '/assets/images/default-image.svg'; this.classList.add('broken-image-fallback'); }"
           />
         </div>
-        <div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{SITE.author}</h3>
-          <p class="text-blue-600 dark:text-blue-400 text-sm">AI Researcher & Developer</p>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-base font-semibold text-gray-900 dark:text-white truncate">{SITE.author}</h3>
+          <p class="text-blue-600 dark:text-blue-400 text-xs mt-0.5">AI Architect & Philosopher</p>
         </div>
       </div>
-      <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">
+      <p class="text-gray-600 dark:text-gray-300 text-xs leading-relaxed mb-3">
         Exploring the intersection of artificial intelligence and human consciousness through code and contemplation.
       </p>
       
@@ -63,9 +63,9 @@ const popularTags = tagsWithCounts
 
     <!-- Navigation Menu -->
     <nav class="space-y-1">
-      <h4 class="text-gray-500 dark:text-gray-400 font-medium text-sm uppercase tracking-wider mb-3 px-3">Navigation</h4>
+      <h4 class="text-gray-500 dark:text-gray-400 font-medium text-xs uppercase tracking-wider mb-2 px-2">Navigation</h4>
       
-      <a href="/" class="group flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
+      <a href="/" class="group flex items-center space-x-2 px-2 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200 text-sm">
         <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
         </svg>
@@ -104,20 +104,20 @@ const popularTags = tagsWithCounts
     <!-- Popular Tags -->
     {popularTags.length > 0 && (
       <div>
-        <div class="flex items-center justify-between mb-3 px-3">
-          <h4 class="text-gray-500 dark:text-gray-400 font-medium text-sm uppercase tracking-wider">Popular Tags</h4>
+        <div class="flex items-center justify-between mb-2 px-2">
+          <h4 class="text-gray-500 dark:text-gray-400 font-medium text-xs uppercase tracking-wider">Popular Tags</h4>
           <a href="/tags" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
             View All →
           </a>
         </div>
-        <div class="flex flex-wrap gap-2 px-3">
+        <div class="flex flex-wrap gap-1.5 px-2">
           {popularTags.map(({ tag, tagName, count }) => (
             <a 
               href={`/tags/${tag}/`} 
-              class="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800 cursor-pointer"
+              class="px-2 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-xs hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 border border-blue-200 dark:border-blue-800 cursor-pointer"
               title={`${count} post${count !== 1 ? 's' : ''} tagged with ${tagName}`}
             >
-              #{tagName} <span class="text-xs opacity-75">({count})</span>
+              #{tagName} <span class="text-[10px] opacity-75">({count})</span>
             </a>
           ))}
         </div>
@@ -126,7 +126,7 @@ const popularTags = tagsWithCounts
 
     <!-- Quick Actions -->
     <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-      <h4 class="text-gray-500 dark:text-gray-400 font-medium text-sm uppercase tracking-wider mb-3">Quick Actions</h4>
+      <h4 class="text-gray-500 dark:text-gray-400 font-medium text-xs uppercase tracking-wider mb-2">Quick Actions</h4>
       <div class="space-y-2">
         <LinkButton
           href="/rss.xml"

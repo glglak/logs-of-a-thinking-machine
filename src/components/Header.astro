@@ -18,21 +18,21 @@ const isActive = (path: string) => {
 ---
 
 <header class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->
       <div class="flex items-center">
-        <a href="/" class="group flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-800 flex items-center justify-center p-1.5">
+        <a href="/" class="group flex items-center space-x-2">
+          <div class="h-14 w-auto rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-800 flex items-center justify-center px-2.5 py-1">
             <img 
               src="/assets/images/logo.png" 
               alt="Logs of a Thinking Machine Logo" 
-              class="max-w-full max-h-full object-contain"
-              style="width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center;"
+              class="h-full w-auto object-contain"
+              style="max-height: 100%; width: auto; height: 100%; object-fit: contain; object-position: center;"
               onerror="if (this.src !== '/assets/images/default-image.svg') { this.src = '/assets/images/default-image.svg'; this.classList.add('broken-image-fallback'); }"
             />
           </div>
-          <span class="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+          <span class="text-lg font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
         {SITE.title}
           </span>
         </a>
@@ -110,16 +110,16 @@ const isActive = (path: string) => {
     <div class="p-6">
       <div class="flex items-center justify-between mb-8">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-lg overflow-hidden shadow-sm bg-white dark:bg-gray-800 flex items-center justify-center p-1.5">
+          <div class="h-14 w-auto rounded-lg overflow-hidden shadow-sm bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 border border-blue-200 dark:border-gray-700 flex items-center justify-center px-2.5 py-1">
             <img 
               src="/assets/images/logo.png" 
               alt="Logs of a Thinking Machine Logo" 
-              class="max-w-full max-h-full object-contain"
-              style="width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; object-position: center;"
+              class="h-full w-auto object-contain dark:brightness-110 dark:contrast-110"
+              style="max-height: 100%; width: auto; height: 100%; object-fit: contain; object-position: center;"
               onerror="if (this.src !== '/assets/images/default-image.svg') { this.src = '/assets/images/default-image.svg'; this.classList.add('broken-image-fallback'); }"
             />
           </div>
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white">Menu</h2>
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white">Menu</h2>
         </div>
         <button id="close-mobile-menu" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

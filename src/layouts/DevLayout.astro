@@ -107,12 +107,19 @@ const {
         return primaryColorScheme;
       }
 
-      const theme = getPreferredTheme();
-      if (theme === "light") {
-        document.documentElement.classList.remove("dark");
-      } else {
-        document.documentElement.classList.add("dark");
+      function setTheme(theme) {
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+          document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+        localStorage.setItem("theme", theme);
       }
+
+      const theme = getPreferredTheme();
+      setTheme(theme);
 
       window.addEventListener("DOMContentLoaded", () => {
         const themeBtn = document.querySelector("#theme-btn");
@@ -121,8 +128,7 @@ const {
             ? "dark"
             : "light";
           const newTheme = currentTheme === "dark" ? "light" : "dark";
-          document.documentElement.classList.toggle("dark", newTheme === "dark");
-          localStorage.setItem("theme", newTheme);
+          setTheme(newTheme);
         });
       });
     </script>
@@ -135,18 +141,18 @@ const {
       <Sidebar />
       
       <!-- Main Content Area -->
-      <main class="flex-1 lg:ml-64 xl:mr-80 min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div class="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
+      <main class="flex-1 lg:ml-56 xl:mr-72 min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-5 lg:px-6 py-5">
           <slot />
         </div>
       </main>
       
       <!-- Right Sidebar / Quick Actions -->
-      <aside class="hidden xl:block w-80 fixed right-0 top-16 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto shadow-sm">
-        <div class="p-6 space-y-6">
+      <aside class="hidden xl:block w-72 fixed right-0 top-16 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 overflow-y-auto shadow-sm">
+        <div class="p-4 space-y-4">
           <!-- Quick Stats -->
-          <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Stats</h3>
+          <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <h3 class="text-base font-semibold mb-3 text-gray-900 dark:text-white">Quick Stats</h3>
             <div class="space-y-3">
               <a href="/posts" class="flex justify-between items-center hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-2 py-1 -mx-2 -my-1 transition-colors cursor-pointer">
                 <span class="text-gray-600 dark:text-gray-300">Total Posts</span>
