@@ -10,7 +10,10 @@
     "astro": "astro",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "ai:generate": "node scripts/ai-brief.mjs",
+    "x:post": "node scripts/post-to-x.mjs",
+    "x:post:dry": "DRY_RUN=true node scripts/post-to-x.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.12",

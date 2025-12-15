@@ -83,6 +83,7 @@ const structuredData = {
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
+    <meta name="keywords" content={SITE.keywords?.join(", ") || "AI, artificial intelligence, machine learning"} />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="sitemap" href={new URL("sitemap-index.xml", baseURL)} />
 
@@ -121,7 +122,8 @@ const structuredData = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL} />
-    <meta name="twitter:site" content={SITE.title} />
+    <meta name="twitter:site" content={SITE.twitterHandle || SITE.title} />
+    <meta name="twitter:creator" content={SITE.twitterHandle || SITE.author} />
 
     <!-- Google JSON-LD Structured data -->
     <script

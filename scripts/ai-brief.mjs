@@ -120,7 +120,7 @@ async function fetchPerplexity() {
   const body = {
     model: "sonar",
     search_recency_filter: "day",
-    max_tokens: 1500,
+    max_tokens: 2000,
     response_format: {
       type: "json_schema",
       json_schema: {
@@ -135,24 +135,38 @@ async function fetchPerplexity() {
               items: {
                 type: "object",
                 properties: {
-                  title: { type: "string" },
+                  title: { 
+                    type: "string",
+                    description: "SEO-optimized title, 50-60 characters, includes primary keyword"
+                  },
                   url: { type: "string" },
                   source: { type: "string" },
                   image: { type: "string" },
-                  short: { type: "string" },
-                  long: { type: "string" },
+                  short: { 
+                    type: "string",
+                    description: "Compelling meta description, exactly 140-155 characters for SEO"
+                  },
+                  long: { 
+                    type: "string",
+                    description: "Engaging article content with context, implications, and insights"
+                  },
                   tags: { 
                     type: "array",
                     items: { type: "string" },
-                    description: "2-5 relevant tags like 'AI', 'LLM', 'hardware', 'startups', 'research', 'enterprise', 'security', 'automation', 'robotics', 'ethics', 'governance', 'open-source', 'cloud', 'data-center', 'chips', 'manufacturing', 'healthcare', 'finance', 'education', 'digest'"
+                    description: "3-5 relevant tags for discoverability"
                   },
                   category: {
                     type: "string",
                     enum: ["research", "industry", "startups", "enterprise", "hardware", "software", "governance", "ethics", "applications"],
-                    description: "Primary category for the article"
+                    description: "Primary content pillar category"
+                  },
+                  seoKeywords: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "3-5 long-tail SEO keywords for this article"
                   },
                 },
-                required: ["title", "url", "short", "long"],
+                required: ["title", "url", "short", "long", "tags", "category"],
               },
             },
           },
@@ -163,22 +177,42 @@ async function fetchPerplexity() {
     messages: [
       {
         role: "system",
-        content:
-          "You are a concise AI news editor. Write human-readable summaries without filler or clickbait.",
+        content: `You are an expert AI journalist for "Logs of a Thinking Machine" - a thoughtful tech blog that explores AI through the lens of architecture, philosophy, and practical engineering.
+
+Your writing style:
+- ENGAGING: Start with a compelling hook, not dry facts
+- INSIGHTFUL: Explain why this matters to developers and tech leaders  
+- NUANCED: Avoid hype and sensationalism; embrace depth
+- ACTIONABLE: Include practical implications and takeaways
+- CONVERSATIONAL: Write like you're explaining to a smart colleague
+
+Target audience: Senior developers, software architects, AI enthusiasts, tech decision-makers.`,
       },
       {
         role: "user",
-        content:
-          `Summarize the 3 most interesting AI or LLM developments from the past 24h. Each item must include:
-- title: Clear, descriptive title
-- url: Source URL
-- source: Source name/domain
-- short: ≤140 character summary
-- long: 2–3 paragraphs (~300 words) with context
-- tags: Array of 2-5 relevant tags from: AI, LLM, hardware, startups, research, enterprise, security, automation, robotics, ethics, governance, open-source, cloud, data-center, chips, manufacturing, healthcare, finance, education, digest, philosophy, architecture, software-engineering
-- category: One of: research, industry, startups, enterprise, hardware, software, governance, ethics, applications
+        content: `Find and summarize the 3 most significant AI/LLM developments from the past 24 hours. 
 
-Focus on diverse topics and use varied, specific tags. Output JSON only.`,
+For each item provide:
+- title: SEO-optimized (50-60 chars), includes primary keyword, compelling
+- url: Direct source URL
+- source: Publication/domain name
+- short: Meta description (140-155 chars exactly), includes keyword, compelling reason to click
+- long: 3-4 paragraphs (~400 words) structured as:
+  * Paragraph 1: What happened and why it's noteworthy (the hook)
+  * Paragraph 2: Technical details and context (the substance)  
+  * Paragraph 3: Implications for developers/industry (the insight)
+  * Paragraph 4: Future outlook or philosophical reflection (the depth)
+- tags: 3-5 tags from: AI, LLM, research, hardware, startups, enterprise, security, automation, open-source, cloud, ethics, governance, healthcare, finance, education, philosophy, architecture, software-engineering, digest
+- category: Primary pillar (research/industry/startups/enterprise/hardware/software/governance/ethics/applications)
+- seoKeywords: 3-5 long-tail keywords people might search for
+
+Prioritize:
+1. Breakthrough research papers or model releases
+2. Major company announcements or partnerships  
+3. Industry-shifting trends or policy changes
+4. Thought-provoking developments about AI's future
+
+Output valid JSON only.`,
       },
     ],
   };

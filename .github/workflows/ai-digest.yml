@@ -10,12 +10,14 @@ permissions:
   contents: write
 
 jobs:
-  run:
+  generate:
     runs-on: ubuntu-latest
     env:
       PPLX_API_KEY: ${{ secrets.PPLX_API_KEY }}
       VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
       TZ: Africa/Cairo
+    outputs:
+      has_changes: ${{ steps.commit.outputs.has_changes }}
     steps:
       - uses: actions/checkout@v4
 
@@ -33,6 +35,7 @@ jobs:
         run: node scripts/ai-brief.mjs
 
       - name: Commit & push if changed
+        id: commit
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
@@ -40,10 +43,43 @@ jobs:
             git add -A
             git commit -m "chore: add daily AI brief"
             git push
+            echo "has_changes=true" >> $GITHUB_OUTPUT
           else
             echo "No changes to commit."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Trigger Vercel deploy
         if: ${{ env.VERCEL_DEPLOY_HOOK != '' }}
         run: curl -fsSL -X POST "$VERCEL_DEPLOY_HOOK"
+
+  post-to-x:
+    needs: generate
+    if: needs.generate.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    env:
+      X_API_KEY: ${{ secrets.X_API_KEY }}
+      X_API_SECRET: ${{ secrets.X_API_SECRET }}
+      X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+      X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+      SITE_URL: "https://logsofthinkingmachine.com"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install twitter-api-v2
+        run: npm install twitter-api-v2
+
+      - name: Post to X
+        if: ${{ env.X_API_KEY != '' }}
+        run: node scripts/post-to-x.mjs
+
+      - name: Skip X posting (no credentials)
+        if: ${{ env.X_API_KEY == '' }}
+        run: echo "X API credentials not configured. Skipping."

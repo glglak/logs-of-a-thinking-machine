@@ -22,6 +22,12 @@ const filteredSocials = names
     // Define inline SVG for each social platform
     const getIcon = (name: string) => {
       switch(name) {
+        case 'X':
+          return (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          );
         case 'GitHub':
           return (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -38,6 +44,15 @@ const filteredSocials = names
               <path d="M8 8l0 .01"/>
               <path d="M12 16l0 -5"/>
               <path d="M16 16v-3a2 2 0 0 0 -4 0"/>
+            </svg>
+          );
+        case 'RSS':
+          return (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M5 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
+              <path d="M4 4a16 16 0 0 1 16 16"/>
+              <path d="M4 11a9 9 0 0 1 9 9"/>
             </svg>
           );
         default:

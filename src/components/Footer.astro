@@ -5,23 +5,66 @@ import Socials from "./Socials.astro";
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 mt-auto">
+<footer class="bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 border-t border-gray-200 dark:border-gray-700 mt-auto">
   <Hr noPadding />
+  
+  <!-- Newsletter Banner -->
+  <div class="bg-gradient-to-r from-blue-600 to-purple-600 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-center md:text-left">
+          <h3 class="text-xl font-bold text-white mb-1">
+            Stay Ahead of the AI Curve
+          </h3>
+          <p class="text-blue-100 text-sm">
+            Get curated AI insights delivered to your inbox. No spam, ever.
+          </p>
+        </div>
+        <form 
+          action="https://app.kit.com/forms/8635379/subscriptions" 
+          method="post"
+          class="flex w-full md:w-auto gap-2"
+        >
+          <input 
+            type="email" 
+            name="email_address" 
+            placeholder="your@email.com"
+            required
+            class="flex-1 md:w-64 px-4 py-2.5 rounded-lg bg-white/10 backdrop-blur border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+          />
+          <button 
+            type="submit"
+            class="px-6 py-2.5 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors shadow-lg"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <!-- Brand Section -->
       <div class="md:col-span-2">
         <div class="flex items-center space-x-3 mb-6">
-          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
-            <span class="text-white font-bold text-lg">🎛️</span>
+          <img 
+            src="/assets/images/logo.png" 
+            alt="Logs of a Thinking Machine" 
+            class="w-12 h-12 rounded-xl shadow-md object-contain bg-white"
+          />
+          <div>
+            <span class="text-xl font-bold text-gray-900 dark:text-white block">
+              Logs of a Thinking Machine
+            </span>
+            <span class="text-sm text-gray-500 dark:text-gray-400">
+              Byte-sized AI Reflections
+            </span>
           </div>
-          <span class="text-xl font-bold text-gray-900 dark:text-white">
-            Logs of a Thinking Machine
-          </span>
         </div>
         <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-md">
-          Exploring the intersection of artificial intelligence and human consciousness. 
-          A digital journey through thoughts, code, and philosophy.
+          Where architecture meets AI and philosophy. Exploring the intersection of technology, 
+          humanity, and the stories we tell ourselves in code.
         </p>
         <Socials />
       </div>
@@ -29,7 +72,7 @@ const currentYear = new Date().getFullYear();
       <!-- Quick Links -->
       <div>
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Quick Links
+          Explore
         </h3>
         <nav class="space-y-3">
           <a href="/" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
@@ -39,7 +82,7 @@ const currentYear = new Date().getFullYear();
             All Posts
           </a>
           <a href="/tags" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
-            Tags
+            Topics
           </a>
           <a href="/about" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
             About
@@ -50,16 +93,34 @@ const currentYear = new Date().getFullYear();
         </nav>
       </div>
 
-      <!-- Resources -->
+      <!-- Connect -->
       <div>
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Resources
+          Connect
         </h3>
         <div class="space-y-3">
-          <a href="/rss.xml" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+          <a href="https://x.com/logsofthinking" target="_blank" rel="noopener" class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            Follow on X
+          </a>
+          <a href="https://github.com/glglak" target="_blank" rel="noopener" class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            Star on GitHub
+          </a>
+          <a href="/rss.xml" class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+            </svg>
             RSS Feed
           </a>
-          <a href="/sitemap-index.xml" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+          <a href="/sitemap-index.xml" class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+            </svg>
             Sitemap
           </a>
         </div>
@@ -70,15 +131,22 @@ const currentYear = new Date().getFullYear();
     <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
       <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
         <p class="text-gray-500 dark:text-gray-400 text-sm">
-          © {currentYear} Karim Deraz. All rights reserved.
+          © {currentYear} <a href="https://www.linkedin.com/in/karimderaz/" target="_blank" rel="noopener" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Karim Deraz</a>. All rights reserved.
         </p>
-        <div class="flex items-center space-x-6 text-sm">
-          <span class="text-gray-500 dark:text-gray-400">
-            Built with <span class="text-blue-600 dark:text-blue-400">Astro</span>
+        <div class="flex items-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
+          <span class="flex items-center gap-1">
+            Built with 
+            <a href="https://astro.build" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-600 transition-colors font-medium">Astro</a>
           </span>
           <span class="text-gray-300 dark:text-gray-600">•</span>
-          <span class="text-gray-500 dark:text-gray-400">
-            Hosted on <span class="text-blue-600 dark:text-blue-400">Vercel</span>
+          <span class="flex items-center gap-1">
+            Powered by
+            <span class="text-blue-600 dark:text-blue-400 font-medium">AI</span>
+          </span>
+          <span class="text-gray-300 dark:text-gray-600">•</span>
+          <span class="flex items-center gap-1">
+            Hosted on
+            <a href="https://vercel.com" target="_blank" rel="noopener" class="text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">Vercel</a>
           </span>
         </div>
       </div>

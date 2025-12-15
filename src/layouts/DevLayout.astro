@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Sidebar from "@/components/Sidebar.astro";
 import ConvertKitSubscribe from "@/components/ConvertKitSubscribe.astro";
+import NewsletterPopup from "@/components/NewsletterPopup.astro";
 import "@/styles/global.css";
 
 // Get dynamic stats
@@ -57,7 +58,10 @@ const {
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
+    <meta name="keywords" content="AI blog, artificial intelligence, machine learning, LLM, GPT, neural networks, AI news, tech philosophy, software architecture" />
+    <meta name="robots" content="index, follow" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Logs of a Thinking Machine RSS" href="/rss.xml" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content={title} />
@@ -187,14 +191,12 @@ const {
               </div>
             </div>
           </div>
-
-          <!-- Newsletter -->
-          <ConvertKitSubscribe />
         </div>
       </aside>
     </div>
 
     <Footer />
+    <NewsletterPopup />
   </body>
 </html>
 

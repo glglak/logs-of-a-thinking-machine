@@ -7,6 +7,7 @@ import IconWhatsapp from "@/assets/icons/IconWhatsapp.svg";
 import IconFacebook from "@/assets/icons/IconFacebook.svg";
 import IconTelegram from "@/assets/icons/IconTelegram.svg";
 import IconPinterest from "@/assets/icons/IconPinterest.svg";
+import IconRss from "@/assets/icons/IconRss.svg";
 import { SITE } from "@/config";
 
 interface Social {
@@ -18,6 +19,12 @@ interface Social {
 
 export const SOCIALS: Social[] = [
   {
+    name: "X",
+    href: "https://x.com/logsofthinking", // Update with your actual X handle
+    linkTitle: `Follow ${SITE.author} on X`,
+    icon: IconBrandX,
+  },
+  {
     name: "GitHub",
     href: "https://github.com/glglak",
     linkTitle: `${SITE.author} on GitHub`,
@@ -28,6 +35,12 @@ export const SOCIALS: Social[] = [
     href: "https://www.linkedin.com/in/karimderaz/",
     linkTitle: `${SITE.author} on LinkedIn`,
     icon: IconLinkedin,
+  },
+  {
+    name: "RSS",
+    href: "/rss.xml",
+    linkTitle: `Subscribe to RSS Feed`,
+    icon: IconRss,
   },
 ] as const;
 
