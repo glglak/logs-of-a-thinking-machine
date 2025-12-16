@@ -1,20 +1,11 @@
 /**
  * Post New Blog Articles to X (Twitter)
  * 
- * Usage:
- *   node scripts/post-to-x.mjs
- * 
- * Environment Variables Required:
- *   X_API_KEY        - X API Key (from developer portal)
- *   X_API_SECRET     - X API Secret
- *   X_ACCESS_TOKEN   - Access Token (with write permissions)
- *   X_ACCESS_SECRET  - Access Token Secret
- * 
- * Optional:
- *   SITE_URL         - Your blog URL (default: https://logsofthinkingmachine.com)
- *   DRY_RUN          - Set to "true" to preview without posting
- * 
- * You can also create a .env file in the project root with these values.
+ * Features:
+ * - Posts with images when available
+ * - Correct URL generation
+ * - Varied tweet templates
+ * - Tracks posted articles to avoid duplicates
  */
 
 import fs from 'node:fs/promises';
@@ -44,15 +35,14 @@ const BLOG_DIR = 'src/data/blog';
 const SITE_URL = process.env.SITE_URL || 'https://logsofthinkingmachine.com';
 const POSTED_TRACKER = '.x-posted-articles.json';
 const DRY_RUN = process.env.DRY_RUN === 'true';
-const MAX_POSTS_PER_RUN = 1; // Avoid spam
+const MAX_POSTS_PER_RUN = 1;
 
-// Tweet templates for variety
+// Human-friendly tweet templates (dev.to style)
 const TWEET_TEMPLATES = [
-  (title, desc, url, tags) => `🤖 ${title}\n\n${desc}\n\n${url}\n\n${tags}`,
-  (title, desc, url, tags) => `🚀 New on the blog:\n\n${title}\n\n${desc}\n\n${url}\n\n${tags}`,
-  (title, desc, url, tags) => `💡 ${title}\n\n${desc}\n\nRead more: ${url}\n\n${tags}`,
-  (title, desc, url, tags) => `📰 AI Update:\n\n${title}\n\n${desc}\n\n${url}\n\n${tags}`,
-  (title, desc, url, tags) => `🧠 Thinking about AI:\n\n${title}\n\n${url}\n\n${tags}`,
+  (title, desc, url) => `${title}\n\n${desc}\n\n${url}`,
+  (title, desc, url) => `New post:\n\n${title}\n\n${url}`,
+  (title, desc, url) => `${title}\n\nRead more:\n${url}`,
+  (title, desc, url) => `Just published:\n\n${title}\n\n${desc}\n\n${url}`,
 ];
 
 async function loadPostedArticles() {
@@ -89,44 +79,45 @@ function parseMarkdownFrontmatter(content) {
   return {
     title: getValue('title'),
     description: getValue('description'),
+    heroImage: getValue('heroImage'),
+    ogImage: getValue('ogImage'),
     tags: getArray('tags'),
     pubDatetime: getValue('pubDatetime'),
   };
 }
 
+// Create slug exactly like Astro does - use filename without .md
 function createSlug(filename) {
-  return filename
-    .replace(/^\d{4}-\d{2}-\d{2}-/, '')  // Remove date prefix
-    .replace(/-\d{6}-\d{3}-\w{4}\.md$/, '')  // Remove timestamp suffix
-    .replace(/\.md$/, '');
+  // Remove .md extension, keep everything else including date
+  // Example: 2025-11-22-some-article-title-211406-943-7a9c.md -> 2025-11-22-some-article-title-211406-943-7a9c
+  return filename.replace(/\.md$/, '');
 }
 
 function createTweet(title, description, url, tags) {
-  // Pick a random template
   const template = TWEET_TEMPLATES[Math.floor(Math.random() * TWEET_TEMPLATES.length)];
   
-  // Create hashtags (max 3, clean them)
+  // Create hashtags (max 2, clean them)
   const hashtags = tags
-    .slice(0, 3)
+    .filter(t => t.toLowerCase() !== 'digest' && t.toLowerCase() !== 'ai')
+    .slice(0, 2)
     .map(t => `#${t.replace(/[^a-zA-Z0-9]/g, '')}`)
     .join(' ');
 
   // Truncate description to fit
-  const maxDescLength = 280 - title.length - url.length - hashtags.length - 30; // Buffer for template
-  const shortDesc = description.length > maxDescLength 
-    ? description.slice(0, maxDescLength - 3) + '...'
+  const shortDesc = description.length > 100 
+    ? description.slice(0, 97) + '...'
     : description;
 
-  let tweet = template(title, shortDesc, url, hashtags);
+  let tweet = template(title, shortDesc, url);
   
+  // Add hashtags if room
+  if (tweet.length + hashtags.length + 2 <= 280 && hashtags) {
+    tweet += `\n\n${hashtags}`;
+  }
+
   // Final truncation if needed
   if (tweet.length > 280) {
-    // Remove description if too long
-    tweet = template(title, '', url, hashtags);
-  }
-  if (tweet.length > 280) {
-    // Remove hashtags if still too long
-    tweet = `🤖 ${title}\n\n${url}`;
+    tweet = `${title}\n\n${url}`;
   }
   if (tweet.length > 280) {
     tweet = tweet.slice(0, 277) + '...';
@@ -135,28 +126,51 @@ function createTweet(title, description, url, tags) {
   return tweet.trim();
 }
 
-async function main() {
-  console.log('🐦 X/Twitter Auto-Poster for Logs of a Thinking Machine\n');
+// Download image and return buffer for upload
+async function downloadImage(imageUrl) {
+  try {
+    if (!imageUrl || !imageUrl.startsWith('http')) return null;
+    
+    console.log(`📷 Downloading image: ${imageUrl.slice(0, 60)}...`);
+    
+    const response = await fetch(imageUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0' }
+    });
+    
+    if (!response.ok) {
+      console.log(`⚠️ Image download failed: ${response.status}`);
+      return null;
+    }
+    
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('image')) {
+      console.log(`⚠️ Not an image: ${contentType}`);
+      return null;
+    }
+    
+    const buffer = Buffer.from(await response.arrayBuffer());
+    console.log(`✅ Image downloaded: ${(buffer.length / 1024).toFixed(1)}KB`);
+    return buffer;
+  } catch (error) {
+    console.log(`⚠️ Image error: ${error.message}`);
+    return null;
+  }
+}
 
-  // Check credentials
+async function main() {
+  console.log('🐦 X Auto-Poster for Logs of a Thinking Machine\n');
+
   const { X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET } = process.env;
   
   if (!X_API_KEY || !X_API_SECRET || !X_ACCESS_TOKEN || !X_ACCESS_SECRET) {
     console.error('❌ Missing X API credentials!');
-    console.error('\nRequired environment variables:');
-    console.error('  X_API_KEY        - Your X API Key');
-    console.error('  X_API_SECRET     - Your X API Secret');
-    console.error('  X_ACCESS_TOKEN   - Your Access Token');
-    console.error('  X_ACCESS_SECRET  - Your Access Token Secret');
-    console.error('\nGet these from: https://developer.twitter.com/en/portal/dashboard');
+    console.error('Required: X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET');
     process.exit(1);
   }
 
-  // Load already posted articles
   const postedArticles = await loadPostedArticles();
   console.log(`📊 Previously posted: ${postedArticles.size} articles`);
 
-  // Get all blog posts
   const files = await fs.readdir(BLOG_DIR);
   const mdFiles = files.filter(f => f.endsWith('.md'));
   console.log(`📚 Found ${mdFiles.length} total articles\n`);
@@ -197,10 +211,9 @@ async function main() {
       appSecret: X_API_SECRET,
       accessToken: X_ACCESS_TOKEN,
       accessSecret: X_ACCESS_SECRET,
-    }).readWrite;
+    });
   }
 
-  // Post articles
   let posted = 0;
   for (const article of unposted) {
     if (posted >= MAX_POSTS_PER_RUN) {
@@ -208,8 +221,10 @@ async function main() {
       break;
     }
 
+    // Create correct URL using full slug (filename without .md)
     const slug = createSlug(article.filename);
     const url = `${SITE_URL}/posts/${slug}`;
+    
     const tweet = createTweet(
       article.title,
       article.description || '',
@@ -232,14 +247,34 @@ async function main() {
     }
 
     try {
-      const response = await client.v2.tweet(tweet);
+      // Try to upload image if available
+      let mediaId = null;
+      const imageUrl = article.heroImage || article.ogImage;
+      
+      if (imageUrl) {
+        const imageBuffer = await downloadImage(imageUrl);
+        if (imageBuffer) {
+          try {
+            mediaId = await client.v1.uploadMedia(imageBuffer, { mimeType: 'image/jpeg' });
+            console.log(`📷 Image uploaded: ${mediaId}`);
+          } catch (uploadError) {
+            console.log(`⚠️ Image upload failed: ${uploadError.message}`);
+          }
+        }
+      }
+
+      // Post tweet (with or without image)
+      const tweetOptions = mediaId 
+        ? { text: tweet, media: { media_ids: [mediaId] } }
+        : { text: tweet };
+      
+      const response = await client.v2.tweet(tweetOptions);
       console.log(`✅ Posted! Tweet ID: ${response.data.id}`);
-      console.log(`🔗 https://x.com/i/status/${response.data.id}`);
+      console.log(`🔗 https://x.com/logsthinkingai/status/${response.data.id}`);
       
       postedArticles.add(article.filename);
       posted++;
       
-      // Rate limiting - wait 2 seconds between posts
       if (posted < MAX_POSTS_PER_RUN) {
         await new Promise(r => setTimeout(r, 2000));
       }
@@ -251,11 +286,9 @@ async function main() {
     }
   }
 
-  // Save progress
   await savePostedArticles(postedArticles);
   console.log(`\n🎉 Posted ${posted} article(s) to X!`);
   console.log(`📊 Total posted: ${postedArticles.size}/${mdFiles.length} articles`);
 }
 
 main().catch(console.error);
-

@@ -137,14 +137,14 @@ async function fetchPerplexity() {
                 properties: {
                   title: { 
                     type: "string",
-                    description: "SEO-optimized title, 50-60 characters, includes primary keyword"
+                    description: "Human-friendly dev.to style title - catchy, curious, conversational"
                   },
                   url: { type: "string" },
                   source: { type: "string" },
                   image: { type: "string" },
                   short: { 
                     type: "string",
-                    description: "Compelling meta description, exactly 140-155 characters for SEO"
+                    description: "Compelling one-liner that makes people want to read more"
                   },
                   long: { 
                     type: "string",
@@ -160,11 +160,6 @@ async function fetchPerplexity() {
                     enum: ["research", "industry", "startups", "enterprise", "hardware", "software", "governance", "ethics", "applications"],
                     description: "Primary content pillar category"
                   },
-                  seoKeywords: {
-                    type: "array",
-                    items: { type: "string" },
-                    description: "3-5 long-tail SEO keywords for this article"
-                  },
                 },
                 required: ["title", "url", "short", "long", "tags", "category"],
               },
@@ -177,42 +172,53 @@ async function fetchPerplexity() {
     messages: [
       {
         role: "system",
-        content: `You are an expert AI journalist for "Logs of a Thinking Machine" - a thoughtful tech blog that explores AI through the lens of architecture, philosophy, and practical engineering.
+        content: `You are a developer advocate writing for dev.to. Your titles are HUMAN and CATCHY - never corporate or boring.
 
-Your writing style:
-- ENGAGING: Start with a compelling hook, not dry facts
-- INSIGHTFUL: Explain why this matters to developers and tech leaders  
-- NUANCED: Avoid hype and sensationalism; embrace depth
-- ACTIONABLE: Include practical implications and takeaways
-- CONVERSATIONAL: Write like you're explaining to a smart colleague
+TITLE STYLE (like dev.to top posts):
+- "I Built an AI That Writes Code - Here's What I Learned"
+- "Why Every Developer Should Care About This New LLM"  
+- "The Surprising Reason OpenAI Just Changed Everything"
+- "How I Reduced My API Costs by 80% with This One Trick"
+- "This Open Source Model Just Beat GPT-4 (And It's Free)"
+- "What Nobody Tells You About Running LLMs in Production"
 
-Target audience: Senior developers, software architects, AI enthusiasts, tech decision-makers.`,
+NEVER write titles like:
+- "OpenAI Announces New Model Release" (boring, corporate)
+- "Google Unveils Gemini 2.0" (press release style)
+- "AWS and NVIDIA Expand Partnership" (too formal)
+
+Your writing is:
+- CONVERSATIONAL: Like talking to a friend who's also a developer
+- OPINIONATED: Share what YOU think, not just facts
+- PRACTICAL: What can developers actually DO with this?
+- HONEST: Call out hype, acknowledge limitations`,
       },
       {
         role: "user",
-        content: `Find and summarize the 3 most significant AI/LLM developments from the past 24 hours. 
+        content: `Find the 3 most interesting AI/LLM news from today and write about them in dev.to style.
 
-For each item provide:
-- title: SEO-optimized (50-60 chars), includes primary keyword, compelling
-- url: Direct source URL
-- source: Publication/domain name
-- short: Meta description (140-155 chars exactly), includes keyword, compelling reason to click
-- long: 3-4 paragraphs (~400 words) structured as:
-  * Paragraph 1: What happened and why it's noteworthy (the hook)
-  * Paragraph 2: Technical details and context (the substance)  
-  * Paragraph 3: Implications for developers/industry (the insight)
-  * Paragraph 4: Future outlook or philosophical reflection (the depth)
-- tags: 3-5 tags from: AI, LLM, research, hardware, startups, enterprise, security, automation, open-source, cloud, ethics, governance, healthcare, finance, education, philosophy, architecture, software-engineering, digest
-- category: Primary pillar (research/industry/startups/enterprise/hardware/software/governance/ethics/applications)
-- seoKeywords: 3-5 long-tail keywords people might search for
+For each item:
 
-Prioritize:
-1. Breakthrough research papers or model releases
-2. Major company announcements or partnerships  
-3. Industry-shifting trends or policy changes
-4. Thought-provoking developments about AI's future
+TITLE: Write like a top dev.to post - curious, catchy, human. Examples:
+- "Wait, Did Claude Just Get Way Better at Coding?"
+- "This Tiny Model Runs on Your Phone (And It's Actually Good)"
+- "I Tested the New GPT-5 - Here's the Honest Truth"
+- "Why This Research Paper Should Scare OpenAI"
+- "The AI Feature Nobody Asked For (But Everyone Needs)"
 
-Output valid JSON only.`,
+SHORT: One compelling sentence that hooks the reader. Not a summary - a teaser.
+
+LONG: Write 3-4 paragraphs like a dev.to post:
+- Start with a hook or hot take
+- Explain what happened and why it matters to YOU as a developer
+- Share practical implications or your honest opinion
+- End with a question or call to action
+
+TAGS: Use lowercase, relevant tags
+
+URL: Include the source URL
+
+OUTPUT: Valid JSON only.`,
       },
     ],
   };
