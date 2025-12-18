@@ -27,5 +27,5 @@ pnpm-debug.log*
 # pagefind
 public/pagefind
 
-# X/Twitter posting tracker
-.x-posted-articles.json
+# X/Twitter posting tracker - DO NOT IGNORE, needs to persist
+# .x-posted-articles.json

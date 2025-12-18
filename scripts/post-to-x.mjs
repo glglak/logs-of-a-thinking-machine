@@ -175,32 +175,49 @@ async function main() {
   const mdFiles = files.filter(f => f.endsWith('.md'));
   console.log(`📚 Found ${mdFiles.length} total articles\n`);
 
-  // Find unposted articles
+  // Only consider articles from the last 48 hours (to catch today's posts)
+  const cutoffDate = new Date(Date.now() - 48 * 60 * 60 * 1000);
+  console.log(`📅 Looking for articles newer than: ${cutoffDate.toISOString()}`);
+
+  // Find unposted recent articles
   const unposted = [];
   for (const filename of mdFiles) {
-    if (postedArticles.has(filename)) continue;
+    if (postedArticles.has(filename)) {
+      continue;
+    }
     
     const filepath = path.join(BLOG_DIR, filename);
     const content = await fs.readFile(filepath, 'utf-8');
     const meta = parseMarkdownFrontmatter(content);
     
-    if (meta?.title) {
-      unposted.push({ filename, filepath, ...meta });
+    if (!meta?.title) continue;
+
+    // Check if article is recent enough
+    const pubDate = meta.pubDatetime ? new Date(meta.pubDatetime) : null;
+    if (pubDate && pubDate < cutoffDate) {
+      continue; // Skip old articles
     }
+    
+    unposted.push({ filename, filepath, ...meta });
   }
 
-  console.log(`📝 Unposted articles: ${unposted.length}`);
+  console.log(`📝 Recent unposted articles: ${unposted.length}`);
 
   if (unposted.length === 0) {
-    console.log('✅ All articles have been posted!');
+    console.log('✅ No new articles to post (all recent ones already posted)');
     return;
   }
 
-  // Sort by date (newest first)
+  // Sort by pubDatetime (newest first)
   unposted.sort((a, b) => {
     const dateA = new Date(a.pubDatetime || 0);
     const dateB = new Date(b.pubDatetime || 0);
     return dateB - dateA;
+  });
+  
+  console.log(`\n📋 Articles to post (newest first):`);
+  unposted.slice(0, 5).forEach((a, i) => {
+    console.log(`   ${i + 1}. ${a.title} (${a.pubDatetime})`);
   });
 
   // Initialize X client

@@ -80,6 +80,17 @@ jobs:
         if: ${{ env.X_API_KEY != '' }}
         run: node scripts/post-to-x.mjs
 
+      - name: Commit posted tracker
+        if: ${{ env.X_API_KEY != '' }}
+        run: |
+          if [ -f ".x-posted-articles.json" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .x-posted-articles.json
+            git commit -m "chore: update X posted tracker" || echo "No changes"
+            git push || echo "Push failed"
+          fi
+
       - name: Skip X posting (no credentials)
         if: ${{ env.X_API_KEY == '' }}
         run: echo "X API credentials not configured. Skipping."
