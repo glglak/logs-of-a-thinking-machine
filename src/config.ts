@@ -2,7 +2,7 @@ export const SITE = {
   website: "https://logsofthinkingmachine.com/",
   author: "Karim Deraz",
   profile: "https://www.linkedin.com/in/karimderaz/",
-  desc: "Where architecture meets AI and philosophy. Byte-sized thoughts from a thinking machine exploring the intersection of technology, humanity, and the stories we tell ourselves in code.",
+  desc: "Daily AI news and insights that actually matter. No hype, just what developers need to know about LLMs, tools, and the tech reshaping how we build software.",
   title: "Logs of a Thinking Machine",
   tagline: "Byte-sized AI Reflections",
   ogImage: "logs-of-a-thinking-machine-og.jpg",
