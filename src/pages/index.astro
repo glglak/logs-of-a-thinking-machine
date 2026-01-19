@@ -5,7 +5,7 @@ import Card from "@/components/Card.astro";
 import { SITE } from "@/config";
 
 // Buttondown newsletter (free tier: 100 subscribers)
-const BUTTONDOWN_USERNAME = "logsofthinking";
+const BUTTONDOWN_USERNAME = "logsofthinkingmachine";
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const totalPosts = allPosts.length;
@@ -111,7 +111,7 @@ console.log("Total posts:", totalPosts, "Showing:", posts.length);
         <p class="text-blue-100 text-sm">Join readers receiving byte-sized AI reflections weekly.</p>
       </div>
       <form
-        action={`https://buttondown.email/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
+        action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
         method="post"
         target="popupwindow"
         class="flex w-full sm:w-auto gap-2"

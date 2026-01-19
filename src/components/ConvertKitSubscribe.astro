@@ -2,7 +2,7 @@
 // Newsletter Subscribe Component using Buttondown (Free tier: 100 subscribers)
 // SETUP: Replace 'logsofthinking' with your Buttondown username
 // Create account at: https://buttondown.email
-const BUTTONDOWN_USERNAME = "logsofthinking";
+const BUTTONDOWN_USERNAME = "logsofthinkingmachine";
 ---
 
 <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
@@ -13,10 +13,10 @@ const BUTTONDOWN_USERNAME = "logsofthinking";
 
   <!-- Buttondown Form - Better deliverability, no spam issues -->
   <form
-    action={`https://buttondown.email/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
+    action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
     method="post"
     target="popupwindow"
-    onsubmit="window.open(`https://buttondown.email/${BUTTONDOWN_USERNAME}`, 'popupwindow')"
+    onsubmit="window.open(`https://buttondown.com/${BUTTONDOWN_USERNAME}`, 'popupwindow')"
     class="space-y-3"
   >
     <input

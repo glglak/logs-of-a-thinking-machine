@@ -3,7 +3,7 @@
 // Shows after user scrolls 50% of the page or after 30 seconds
 // Only shows once per session (uses sessionStorage)
 // SETUP: Replace 'logsofthinking' with your Buttondown username
-const BUTTONDOWN_USERNAME = "logsofthinking";
+const BUTTONDOWN_USERNAME = "logsofthinkingmachine";
 ---
 
 <div id="newsletter-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -40,7 +40,7 @@ const BUTTONDOWN_USERNAME = "logsofthinking";
 
       <!-- Buttondown Form - Better deliverability -->
       <form
-        action={`https://buttondown.email/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
+        action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
         method="post"
         target="popupwindow"
         class="space-y-4"

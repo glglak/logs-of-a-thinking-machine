@@ -4,7 +4,7 @@ import Socials from "./Socials.astro";
 
 const currentYear = new Date().getFullYear();
 // Buttondown newsletter (free tier: 100 subscribers)
-const BUTTONDOWN_USERNAME = "logsofthinking";
+const BUTTONDOWN_USERNAME = "logsofthinkingmachine";
 ---
 
 <footer class="bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 border-t border-gray-200 dark:border-gray-700 mt-auto">
@@ -23,7 +23,7 @@ const BUTTONDOWN_USERNAME = "logsofthinking";
           </p>
         </div>
         <form
-          action={`https://buttondown.email/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
+          action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
           method="post"
           target="popupwindow"
           class="flex w-full md:w-auto gap-2"

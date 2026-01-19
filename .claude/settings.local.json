@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(identify:*)",
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: add multiple site improvements and new features\n\n- Fix logo sizing for landscape aspect ratio \\(2816x1536\\)\n- Replace ConvertKit with Buttondown for better email deliverability\n- Add JSON-LD structured data for improved SEO\n- Enhance AI article generation prompt for better content\n- Add Giscus comments system \\(GitHub Discussions based\\)\n- Add privacy-focused analytics component \\(Umami/Plausible/GA\\)\n- Add PWA support with service worker for offline reading\n- Add weekly email digest script and GitHub Action\n- Improve image handling for broken/missing images\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "WebFetch(domain:giscus.app)",
+      "WebFetch(domain:github.com)",
+      "Bash(git commit:*)",
+      "Bash(node -e:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(pnpm install:*)",
+      "WebFetch(domain:logsofthinkingmachine.com)"
+    ]
+  }
+}
