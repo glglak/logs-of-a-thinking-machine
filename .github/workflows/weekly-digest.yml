@@ -1,0 +1,36 @@
+name: Weekly Email Digest
+
+on:
+  schedule:
+    # Every Sunday at 09:00 UTC (11:00 Africa/Cairo)
+    - cron: "0 9 * * 0"
+  workflow_dispatch: {} # Manual trigger
+
+permissions:
+  contents: read
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+    env:
+      BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+      SITE_URL: "https://logsofthinkingmachine.com"
+      TZ: Africa/Cairo
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install gray-matter
+
+      - name: Send Weekly Digest
+        if: ${{ env.BUTTONDOWN_API_KEY != '' }}
+        run: node scripts/weekly-digest.mjs
+
+      - name: Skip digest (no credentials)
+        if: ${{ env.BUTTONDOWN_API_KEY == '' }}
+        run: echo "BUTTONDOWN_API_KEY not configured. Skipping digest."

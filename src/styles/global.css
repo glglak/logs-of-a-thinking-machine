@@ -120,17 +120,8 @@ img.broken-image-fallback {
 header img[src*="logo.png"] {
   object-fit: contain !important;
   object-position: center !important;
-  height: 100% !important;
-  width: auto !important;
+  max-width: 100% !important;
   max-height: 100% !important;
-}
-
-/* Logo container - allow width to adjust to logo aspect ratio */
-header .h-14.w-auto {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 3.5rem;
 }
 
 header {

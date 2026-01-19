@@ -1,0 +1,104 @@
+---
+// Giscus Comments Component
+// Free, open-source comments system powered by GitHub Discussions
+// SETUP:
+// 1. Go to https://giscus.app
+// 2. Enter your repo (e.g., glglak/logs-of-a-thinking-machine)
+// 3. Enable GitHub Discussions on your repo
+// 4. Copy the configuration values below
+
+export interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// Giscus Configuration - Update these values from https://giscus.app
+const GISCUS_CONFIG = {
+  repo: "glglak/logs-of-a-thinking-machine", // Your GitHub repo
+  repoId: "", // Get from giscus.app after enabling
+  category: "Announcements", // Discussion category
+  categoryId: "", // Get from giscus.app
+  mapping: "pathname", // Map comments to URL pathname
+  reactionsEnabled: "1",
+  emitMetadata: "0",
+  inputPosition: "top",
+  theme: "preferred_color_scheme", // Auto light/dark
+  lang: "en",
+  loading: "lazy",
+};
+---
+
+<div class:list={["giscus-wrapper mt-8", className]}>
+  <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+    Comments
+  </h3>
+  <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+    Share your thoughts using your GitHub account.
+  </p>
+
+  <div class="giscus"></div>
+</div>
+
+<script
+  src="https://giscus.app/client.js"
+  data-repo={GISCUS_CONFIG.repo}
+  data-repo-id={GISCUS_CONFIG.repoId}
+  data-category={GISCUS_CONFIG.category}
+  data-category-id={GISCUS_CONFIG.categoryId}
+  data-mapping={GISCUS_CONFIG.mapping}
+  data-strict="0"
+  data-reactions-enabled={GISCUS_CONFIG.reactionsEnabled}
+  data-emit-metadata={GISCUS_CONFIG.emitMetadata}
+  data-input-position={GISCUS_CONFIG.inputPosition}
+  data-theme={GISCUS_CONFIG.theme}
+  data-lang={GISCUS_CONFIG.lang}
+  data-loading={GISCUS_CONFIG.loading}
+  crossorigin="anonymous"
+  async
+></script>
+
+<script>
+  // Sync Giscus theme with site theme
+  function updateGiscusTheme() {
+    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+
+    if (iframe) {
+      iframe.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  // Update theme when it changes
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        updateGiscusTheme();
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, { attributes: true });
+
+  // Initial sync after Giscus loads
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'https://giscus.app') return;
+    if (typeof event.data === 'object' && event.data.giscus) {
+      updateGiscusTheme();
+    }
+  });
+</script>
+
+<style>
+  .giscus-wrapper {
+    border-top: 1px dashed var(--color-border);
+    padding-top: 2rem;
+  }
+
+  .giscus {
+    min-height: 200px;
+  }
+</style>

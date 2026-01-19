@@ -6,6 +6,7 @@ import Footer from "@/components/Footer.astro";
 import Sidebar from "@/components/Sidebar.astro";
 import ConvertKitSubscribe from "@/components/ConvertKitSubscribe.astro";
 import NewsletterPopup from "@/components/NewsletterPopup.astro";
+import Analytics from "@/components/Analytics.astro";
 import "@/styles/global.css";
 
 // Get dynamic stats
@@ -50,6 +51,9 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1e90ff" />
+    <link rel="apple-touch-icon" href="/assets/images/logo.png" />
     <meta name="generator" content={Astro.generator} />
     <link rel="stylesheet" href="/override.css" />
 
@@ -64,10 +68,14 @@ const {
     <link rel="alternate" type="application/rss+xml" title="Logs of a Thinking Machine RSS" href="/rss.xml" />
 
     <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={pubDatetime ? "article" : "website"} />
+    <meta property="og:site_name" content="Logs of a Thinking Machine" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Article Published/Modified time -->
     {
@@ -95,6 +103,55 @@ const {
     <meta property="twitter:image" content={ogImage} />
 
     <ViewTransitions />
+
+    <!-- Analytics (Privacy-focused) -->
+    <Analytics />
+
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json" set:html={JSON.stringify(
+      pubDatetime ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "description": description,
+        "image": new URL(ogImage, Astro.site).href,
+        "datePublished": pubDatetime?.toISOString(),
+        "dateModified": modDatetime?.toISOString() || pubDatetime?.toISOString(),
+        "author": {
+          "@type": "Person",
+          "name": author,
+          "url": "https://www.linkedin.com/in/karimderaz/"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Logs of a Thinking Machine",
+          "logo": {
+            "@type": "ImageObject",
+            "url": new URL("/assets/images/logo.png", Astro.site).href
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": canonicalURL
+        }
+      } : {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Logs of a Thinking Machine",
+        "description": description,
+        "url": new URL("/", Astro.site).href,
+        "author": {
+          "@type": "Person",
+          "name": author,
+          "url": "https://www.linkedin.com/in/karimderaz/"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": new URL("/search?q={search_term_string}", Astro.site).href,
+          "query-input": "required name=search_term_string"
+        }
+      }
+    )} />
 
     <script is:inline>
       const primaryColorScheme = "none"; // "light" | "dark" | "none"
@@ -197,6 +254,21 @@ const {
 
     <Footer />
     <NewsletterPopup />
+
+    <!-- Service Worker Registration for PWA -->
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered:', registration.scope);
+            })
+            .catch((error) => {
+              console.log('SW registration failed:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
 

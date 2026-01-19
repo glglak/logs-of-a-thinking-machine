@@ -10,6 +10,7 @@ import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import RelatedPosts from "@/components/RelatedPosts.astro";
+import Comments from "@/components/Comments.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
@@ -158,6 +159,9 @@ const nextPost =
 
     <!-- Related Posts -->
     <RelatedPosts currentPost={post} allPosts={posts} />
+
+    <!-- Comments Section (Giscus) -->
+    <Comments />
   </main>
   <Footer />
 </Layout>

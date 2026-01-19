@@ -1,0 +1,71 @@
+---
+// Analytics Component - Privacy-focused analytics options
+// Choose ONE of the following options:
+//
+// OPTION 1: Umami (Recommended - Free self-hosted or cloud)
+// - Self-host: https://umami.is/docs/install
+// - Cloud: https://cloud.umami.is (free tier available)
+//
+// OPTION 2: Plausible (Privacy-focused, paid)
+// - https://plausible.io
+//
+// OPTION 3: Google Analytics (Free but privacy concerns)
+// - https://analytics.google.com
+
+// Configuration - Fill in your details for the service you choose
+const ANALYTICS_CONFIG = {
+  // Umami Configuration
+  umami: {
+    enabled: true, // Set to true to enable
+    websiteId: "", // Get from Umami dashboard
+    scriptUrl: "https://cloud.umami.is/script.js", // Or your self-hosted URL
+  },
+
+  // Plausible Configuration
+  plausible: {
+    enabled: false, // Set to true to enable
+    domain: "logsofthinking.com", // Your domain
+    scriptUrl: "https://plausible.io/js/script.js", // Or self-hosted URL
+  },
+
+  // Google Analytics Configuration
+  googleAnalytics: {
+    enabled: false, // Set to true to enable
+    measurementId: "", // e.g., "G-XXXXXXXXXX"
+  },
+};
+---
+
+{/* Umami Analytics */}
+{ANALYTICS_CONFIG.umami.enabled && ANALYTICS_CONFIG.umami.websiteId && (
+  <script
+    defer
+    src={ANALYTICS_CONFIG.umami.scriptUrl}
+    data-website-id={ANALYTICS_CONFIG.umami.websiteId}
+  />
+)}
+
+{/* Plausible Analytics */}
+{ANALYTICS_CONFIG.plausible.enabled && (
+  <script
+    defer
+    data-domain={ANALYTICS_CONFIG.plausible.domain}
+    src={ANALYTICS_CONFIG.plausible.scriptUrl}
+  />
+)}
+
+{/* Google Analytics */}
+{ANALYTICS_CONFIG.googleAnalytics.enabled && ANALYTICS_CONFIG.googleAnalytics.measurementId && (
+  <>
+    <script
+      async
+      src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_CONFIG.googleAnalytics.measurementId}`}
+    />
+    <script is:inline define:vars={{ GA_ID: ANALYTICS_CONFIG.googleAnalytics.measurementId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', GA_ID);
+    </script>
+  </>
+)}

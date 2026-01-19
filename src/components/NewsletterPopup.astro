@@ -1,7 +1,9 @@
 ---
-// Newsletter Popup Component
+// Newsletter Popup Component using Buttondown (Free tier: 100 subscribers)
 // Shows after user scrolls 50% of the page or after 30 seconds
 // Only shows once per session (uses sessionStorage)
+// SETUP: Replace 'logsofthinking' with your Buttondown username
+const BUTTONDOWN_USERNAME = "logsofthinking";
 ---
 
 <div id="newsletter-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -36,20 +38,21 @@
         Join developers and tech leaders receiving curated AI updates. No spam, unsubscribe anytime.
       </p>
 
-      <!-- Form -->
-      <form 
-        action="https://app.kit.com/forms/8635379/subscriptions" 
+      <!-- Buttondown Form - Better deliverability -->
+      <form
+        action={`https://buttondown.email/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
         method="post"
+        target="popupwindow"
         class="space-y-4"
       >
-        <input 
-          type="email" 
-          name="email_address" 
+        <input
+          type="email"
+          name="email"
           placeholder="Enter your email"
           required
           class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
         />
-        <button 
+        <button
           type="submit"
           class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl"
         >

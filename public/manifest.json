@@ -1,0 +1,29 @@
+{
+  "name": "Logs of a Thinking Machine",
+  "short_name": "ThinkingMachine",
+  "description": "Byte-sized AI Reflections - Explorations in AI, Philosophy, and the Digital Mind",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fdfdfd",
+  "theme_color": "#1e90ff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/assets/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["news", "education", "technology"],
+  "lang": "en",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}
