@@ -13,17 +13,17 @@ export interface Props {
 
 const { class: className } = Astro.props;
 
-// Giscus Configuration - Update these values from https://giscus.app
+// Giscus Configuration
 const GISCUS_CONFIG = {
-  repo: "glglak/logs-of-a-thinking-machine", // Your GitHub repo
-  repoId: "", // Get from giscus.app after enabling
-  category: "Announcements", // Discussion category
-  categoryId: "", // Get from giscus.app
-  mapping: "pathname", // Map comments to URL pathname
+  repo: "glglak/logs-of-a-thinking-machine",
+  repoId: "R_kgDOPB_zhw",
+  category: "General",
+  categoryId: "DIC_kwDOPB_zh84C1KWm", // General category
+  mapping: "url",
   reactionsEnabled: "1",
   emitMetadata: "0",
-  inputPosition: "top",
-  theme: "preferred_color_scheme", // Auto light/dark
+  inputPosition: "bottom",
+  theme: "preferred_color_scheme",
   lang: "en",
   loading: "lazy",
 };
