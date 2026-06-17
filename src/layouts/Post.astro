@@ -1,0 +1,68 @@
+---
+import Base from "./Base.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+}
+
+const { title, description, pubDate, updatedDate, tags = [] } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const readingTime = (text: string) => {
+  const words = text.split(/\s+/).length;
+  return Math.ceil(words / 200);
+};
+---
+
+<Base title={`${title} — Logs of a Thinking Machine`} description={description}>
+  <Header />
+  <main class="flex-1 px-6 py-16 max-w-[720px] mx-auto w-full">
+    <article>
+      <header class="mb-12">
+        <time
+          datetime={pubDate.toISOString()}
+          class="text-sm uppercase tracking-wider"
+          style="color: var(--text-faint);"
+        >
+          {formattedDate}
+        </time>
+        <h1
+          class="mt-3 text-4xl md:text-5xl font-semibold leading-tight"
+          style="font-family: var(--font-serif); letter-spacing: -0.03em; color: var(--text);"
+        >
+          {title}
+        </h1>
+        <p class="mt-4 text-lg" style="color: var(--text-muted);">
+          {description}
+        </p>
+        {tags.length > 0 && (
+          <div class="mt-4 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span
+                class="text-xs px-2.5 py-1 rounded-full"
+                style="background: var(--surface); color: var(--text-muted);"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </header>
+      <div class="prose">
+        <slot />
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Base>

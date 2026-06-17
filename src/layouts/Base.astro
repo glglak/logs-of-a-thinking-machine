@@ -1,0 +1,51 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description = "Developer thoughts on software, AI, and the craft of engineering.", ogImage } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = ogImage ? new URL(ogImage, Astro.site) : undefined;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {socialImageURL && <meta property="og:image" content={socialImageURL} />}
+
+    <meta name="twitter:card" content={socialImageURL ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {socialImageURL && <meta name="twitter:image" content={socialImageURL} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline>
+      const theme = localStorage.getItem("theme") ||
+        (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      document.documentElement.setAttribute("data-theme", theme);
+    </script>
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://logsofthinkingmachine.com/sitemap-index.xml

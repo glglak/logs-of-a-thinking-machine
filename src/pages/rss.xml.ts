@@ -1,21 +1,20 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
-import { getPath } from "@/utils/getPath";
-import getSortedPosts from "@/utils/getSortedPosts";
-import { SITE } from "@/config";
+import type { APIContext } from "astro";
 
-export async function GET() {
-  const posts = await getCollection("blog");
-  const sortedPosts = getSortedPosts(posts);
+export async function GET(context: APIContext) {
+  const posts = (await getCollection("writing", ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
   return rss({
-    title: SITE.title,
-    description: SITE.desc,
-    site: SITE.website,
-    items: sortedPosts.map(({ data, id, filePath }) => ({
-      link: getPath(id, filePath),
-      title: data.title,
-      description: data.description,
-      pubDate: new Date(data.modDatetime ?? data.pubDatetime),
+    title: "Logs of a Thinking Machine",
+    description: "Notes on software engineering, AI, and the human side of building things.",
+    site: context.site!,
+    items: posts.map((post) => ({
+      title: post.data.title,
+      pubDate: post.data.pubDate,
+      description: post.data.description,
+      link: `/writing/${post.id}/`,
     })),
   });
 }

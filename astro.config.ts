@@ -1,62 +1,20 @@
-import { defineConfig, envField } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
+import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
-import {
-  transformerNotationDiff,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
-} from "@shikijs/transformers";
-import { transformerFileName } from "./src/utils/transformers/fileName";
-import { remarkImageFallback } from "./src/utils/remarkImageFallback";
-import { SITE } from "./src/config";
+import tailwindcss from "@tailwindcss/vite";
 
-// https://astro.build/config
 export default defineConfig({
-  site: SITE.website,
-  integrations: [
-    sitemap({
-      filter: page => SITE.showArchives || !page.endsWith("/archives"),
-      // Sitemap will automatically discover all pages from src/pages/
-      // Blog posts are discovered from content collections
-    }),
-  ],
-  markdown: {
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }], remarkImageFallback],
-    shikiConfig: {
-      // For more themes, visit https://shiki.style/themes
-      themes: { light: "min-light", dark: "night-owl" },
-      defaultColor: false,
-      wrap: false,
-      transformers: [
-        transformerFileName(),
-        transformerNotationHighlight(),
-        transformerNotationWordHighlight(),
-        transformerNotationDiff({ matchAlgorithm: "v3" }),
-      ],
-    },
-  },
+  site: "https://logsofthinkingmachine.com",
+  integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
-    optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
+  },
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+        dark: "vesper",
+      },
     },
-  },
-  image: {
-    responsiveStyles: true,
-    layout: "constrained",
-  },
-  env: {
-    schema: {
-      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
-        access: "public",
-        context: "client",
-        optional: true,
-      }),
-    },
-  },
-  experimental: {
-    preserveScriptOrder: true,
   },
 });

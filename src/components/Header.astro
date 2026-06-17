@@ -1,179 +1,70 @@
 ---
-import Hr from "./Hr.astro";
-import LinkButton from "./LinkButton.astro";
-import { SITE } from "@/config";
-
-const { pathname } = Astro.url;
-
-// Remove trailing slash from current pathname if exists
-const currentPath =
-  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
-
-const isActive = (path: string) => {
-  const currentPathArray = currentPath.split("/").filter((p: string) => p.trim());
-  const pathArray = path.split("/").filter((p: string) => p.trim());
-
-  return currentPath === path || currentPathArray[0] === pathArray[0];
-};
+const pathname = Astro.url.pathname;
+const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/");
 ---
 
-<header class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
-    <div class="flex justify-between items-center h-16">
-      <!-- Logo -->
-      <div class="flex items-center">
-        <a href="/" class="group flex items-center">
-          <img
-            src="/assets/images/logo.png"
-            alt="Logs of a Thinking Machine Logo"
-            class="h-12 sm:h-14 w-auto object-contain"
-            onerror="if (this.src !== '/assets/images/default-image.svg') { this.src = '/assets/images/default-image.svg'; this.classList.add('broken-image-fallback'); }"
-          />
-        </a>
-      </div>
-      
-      <!-- Mobile menu button -->
-      <button 
-        id="mobile-menu-btn"
-        class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200"
-        aria-label="Toggle mobile menu"
+<header
+  class="sticky top-0 z-50 px-6 py-4 backdrop-blur-md"
+  style="background: color-mix(in srgb, var(--bg) 85%, transparent); border-bottom: 1px solid var(--border);"
+>
+  <nav class="max-w-[1080px] mx-auto flex items-center justify-between">
+    <a href="/" class="text-lg font-semibold tracking-tight" style="color: var(--text);">
+      lotm<span style="color: var(--accent);">.</span>
+    </a>
+    <div class="flex items-center gap-6">
+      <a
+        href="/writing"
+        class="text-sm font-medium transition-colors"
+        style={`color: ${isActive("/writing") ? "var(--accent)" : "var(--text-muted)"};`}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-          <path d="M4 6h16M4 12h8m-8 6h16"/>
+        Writing
+      </a>
+      <a
+        href="/about"
+        class="text-sm font-medium transition-colors"
+        style={`color: ${isActive("/about") ? "var(--accent)" : "var(--text-muted)"};`}
+      >
+        About
+      </a>
+      <button
+        id="theme-toggle"
+        class="p-2 rounded-lg transition-colors cursor-pointer"
+        style="color: var(--text-muted);"
+        aria-label="Toggle theme"
+      >
+        <svg class="w-4 h-4 dark-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
-        </button>
-      
-      <!-- Right side actions -->
-      <div class="hidden lg:flex items-center space-x-3">
-        <!-- Search -->
-            <LinkButton
-              href="/search"
-          class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200"
-          ariaLabel="Search"
-              title="Search"
-            >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-            </LinkButton>
-        
-        <!-- Theme Toggle -->
-        {SITE.lightAndDarkMode && (
-                <button
-                  id="theme-btn"
-            class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200"
-            title="Toggle theme"
-            aria-label="Toggle theme"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block dark:hidden">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-              <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>
-            </svg>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 hidden dark:block">
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-              <path d="M14.828 14.828a4 4 0 1 0 -5.656 -5.656a4 4 0 0 0 5.656 5.656z"/>
-              <path d="M6.343 17.657l-1.414 1.414"/>
-              <path d="M6.343 6.343l-1.414 -1.414"/>
-              <path d="M17.657 6.343l1.414 -1.414"/>
-              <path d="M17.657 17.657l1.414 1.414"/>
-              <path d="M4 12h-2"/>
-              <path d="M12 4v-2"/>
-              <path d="M20 12h2"/>
-              <path d="M12 20v2"/>
-            </svg>
-          </button>
-        )}
-        
-        <!-- Action button -->
-        <a
-          href="/posts"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
-        >
-          Read Posts
-        </a>
-      </div>
+        <svg class="w-4 h-4 light-icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
     </div>
-  </div>
+  </nav>
 </header>
 
-<!-- Mobile Navigation Overlay -->
-<div id="mobile-nav" class="lg:hidden fixed inset-0 z-50 bg-black/50 hidden">
-  <div class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-gray-900 shadow-xl">
-    <div class="p-6">
-      <div class="flex items-center justify-between mb-8">
-        <div class="flex items-center">
-          <img
-            src="/assets/images/logo.png"
-            alt="Logs of a Thinking Machine Logo"
-            class="h-10 w-auto object-contain"
-          />
-        </div>
-        <button id="close-mobile-menu" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-                </button>
-      </div>
-      
-      <nav class="space-y-2">
-        <a href="/" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-          </svg>
-          <span>Home</span>
-        </a>
-        <a href="/posts" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
-          <span>Posts</span>
-        </a>
-        <a href="/tags" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-          </svg>
-          <span>Tags</span>
-        </a>
-        <a href="/about" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <span>About</span>
-        </a>
-        <a href="/search" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-          <span>Search</span>
-        </a>
-      </nav>
-    </div>
-  </div>
-</div>
-
 <script>
-  function initializeHeader() {
-    const mobileMenuBtn = document.querySelector("#mobile-menu-btn");
-    const mobileNav = document.querySelector("#mobile-nav");
-    const closeMobileMenu = document.querySelector("#close-mobile-menu");
+  function setupThemeToggle() {
+    const btn = document.getElementById("theme-toggle");
+    if (!btn) return;
 
-    function toggleMobileMenu() {
-      mobileNav?.classList.toggle("hidden");
-    }
+    const update = () => {
+      const isDark = document.documentElement.getAttribute("data-theme") !== "light";
+      btn.querySelector(".dark-icon")?.classList.toggle("hidden", !isDark);
+      btn.querySelector(".light-icon")?.classList.toggle("hidden", isDark);
+    };
 
-    mobileMenuBtn?.addEventListener("click", toggleMobileMenu);
-    closeMobileMenu?.addEventListener("click", toggleMobileMenu);
-    
-    // Close on overlay click
-    mobileNav?.addEventListener("click", (e) => {
-      if (e.target === mobileNav) {
-        toggleMobileMenu();
-      }
+    btn.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const next = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      update();
     });
+
+    update();
   }
 
-  initializeHeader();
-  document.addEventListener("astro:after-swap", initializeHeader);
+  setupThemeToggle();
+  document.addEventListener("astro:after-swap", setupThemeToggle);
 </script>

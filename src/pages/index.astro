@@ -1,205 +1,85 @@
 ---
+import Base from "@/layouts/Base.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import PostCard from "@/components/PostCard.astro";
 import { getCollection } from "astro:content";
-import DevLayout from "@/layouts/DevLayout.astro";
-import Card from "@/components/Card.astro";
-import { SITE } from "@/config";
 
-// Buttondown newsletter (free tier: 100 subscribers)
-const BUTTONDOWN_USERNAME = "logsofthinkingmachine";
+const posts = (await getCollection("writing", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-const totalPosts = allPosts.length;
-const posts = allPosts
-  .sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf())
-  .slice(0, SITE.postPerIndex);
-
-// Get unique tags with counts for popular topics
-const tagCounts = new Map<string, number>();
-allPosts.forEach(post => {
-  post.data.tags?.forEach(tag => {
-    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
-  });
-});
-
-// Top 8 tags sorted by count
-const popularTags = Array.from(tagCounts.entries())
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 8)
-  .map(([tag]) => tag);
-
-// Tag icons map
-const tagIcons: Record<string, string> = {
-  "AI": "🤖",
-  "LLM": "💬",
-  "research": "🔬",
-  "philosophy": "🧠",
-  "hardware": "🔧",
-  "startups": "🚀",
-  "enterprise": "🏢",
-  "open-source": "📖",
-  "security": "🔒",
-  "automation": "⚙️",
-  "ethics": "⚖️",
-  "digest": "📰",
-};
-
-console.log("Total posts:", totalPosts, "Showing:", posts.length);
+const featured = posts.filter((p) => p.data.featured);
+const recent = posts.slice(0, 5);
 ---
 
-<DevLayout title={SITE.title} description={SITE.desc}>
-  <!-- Hero Section with Branding -->
-  <div class="mb-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
-    <div class="flex items-start gap-6">
-      <div class="hidden sm:block shrink-0">
-        <img
-          src="/assets/images/logo.png"
-          alt="Logs of a Thinking Machine"
-          class="h-24 w-auto object-contain"
-        />
-      </div>
-      <div class="flex-1">
-        <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-          {SITE.title}
-        </h1>
-        <p class="text-lg text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-          {SITE.desc}
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-sm">
-          <a href="/posts" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-colors shadow-sm">
-            <span class="font-semibold">{totalPosts}</span>
-            <span>Articles</span>
-          </a>
-          <span class="text-gray-400 hidden sm:inline">•</span>
-          <span class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
-            <span class="animate-pulse inline-block w-2 h-2 bg-green-500 rounded-full"></span>
-            Updated daily with AI insights
-          </span>
+<Base title="Logs of a Thinking Machine — Karim Deraz">
+  <Header />
+  <main class="flex-1">
+    <section class="px-6 pt-24 pb-16 max-w-[720px] mx-auto">
+      <h1
+        class="text-4xl md:text-6xl font-semibold leading-[1.1] tracking-tight"
+        style="font-family: var(--font-serif); color: var(--text);"
+      >
+        Logs of a<br />
+        <span style="color: var(--accent);">Thinking Machine</span>
+      </h1>
+      <p class="mt-6 text-lg md:text-xl leading-relaxed max-w-[55ch]" style="color: var(--text-muted);">
+        Notes on software engineering, AI, and the human side of building things.
+        Written by <strong style="color: var(--text);">Karim Deraz</strong> —
+        a developer who thinks about how we think about code.
+      </p>
+    </section>
+
+    {featured.length > 0 && (
+      <section class="px-6 pb-12 max-w-[720px] mx-auto">
+        <h2
+          class="text-sm font-medium uppercase tracking-wider mb-6"
+          style="color: var(--text-faint);"
+        >
+          Featured
+        </h2>
+        <div>
+          {featured.map((post) => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              slug={post.id}
+              tags={post.data.tags}
+            />
+          ))}
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Topic Pills / Categories -->
-  <div class="mb-8">
-    <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-      Explore Topics
-    </h2>
-    <div class="flex flex-wrap gap-2">
-      {popularTags.map(tag => (
-        <a 
-          href={`/tags/${tag.toLowerCase()}`}
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 dark:hover:border-blue-700 hover:text-blue-700 dark:hover:text-blue-300 transition-all duration-200"
-        >
-          <span>{tagIcons[tag] || "📌"}</span>
-          <span class="capitalize">{tag}</span>
-        </a>
-      ))}
-      <a 
-        href="/tags"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-      >
-        View all →
-      </a>
-    </div>
-  </div>
-
-  <!-- Newsletter CTA -->
-  <div class="mb-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white shadow-lg">
-    <div class="flex flex-col sm:flex-row items-center gap-4">
-      <div class="flex-1 text-center sm:text-left">
-        <h3 class="text-xl font-bold mb-1">Get AI Insights in Your Inbox</h3>
-        <p class="text-blue-100 text-sm">Join readers receiving byte-sized AI reflections weekly.</p>
-      </div>
-      <form
-        action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
-        method="post"
-        target="popupwindow"
-        class="flex w-full sm:w-auto gap-2"
-      >
-        <input
-          type="email"
-          name="email"
-          placeholder="your@email.com"
-          required
-          class="flex-1 sm:w-64 px-4 py-2 rounded-lg bg-white/10 backdrop-blur border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
-        />
-        <button
-          type="submit"
-          class="px-5 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors shadow-sm"
-        >
-          Subscribe
-        </button>
-      </form>
-    </div>
-  </div>
-  
-  <!-- Latest Posts Section -->
-  <div class="mb-4 flex items-center justify-between">
-    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-      Latest Posts
-    </h2>
-    <a 
-      href="/posts"
-      class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-    >
-      View all →
-    </a>
-  </div>
-
-  <!-- Posts Feed -->
-  <div class="space-y-6">
-    {posts.length > 0 ? (
-      <>
-        <ul class="space-y-6">
-          {posts.map(post => <Card variant="h2" {...post} />)}
-        </ul>
-        {totalPosts > SITE.postPerIndex && (
-          <div class="text-center pt-8">
-            <a 
-              href="/posts" 
-              class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-sm"
-            >
-              View All Posts ({totalPosts})
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-              </svg>
-            </a>
-          </div>
-        )}
-      </>
-    ) : (
-      <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <p class="text-gray-600 dark:text-gray-400">No posts found.</p>
-      </div>
+      </section>
     )}
-  </div>
 
-  <!-- Bottom CTA -->
-  <div class="mt-12 text-center py-8 border-t border-gray-200 dark:border-gray-700">
-    <p class="text-gray-500 dark:text-gray-400 mb-4">
-      Enjoying the content? Follow along on social media.
-    </p>
-    <div class="flex justify-center gap-4">
-      <a 
-        href="https://x.com/logsofthinking"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:opacity-80 transition-opacity"
-      >
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-        Follow on X
-      </a>
-      <a 
-        href="/rss.xml"
-        class="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/>
-        </svg>
-        RSS Feed
-      </a>
-    </div>
-  </div>
-</DevLayout>
+    <section class="px-6 pb-20 max-w-[720px] mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <h2
+          class="text-sm font-medium uppercase tracking-wider"
+          style="color: var(--text-faint);"
+        >
+          Recent Writing
+        </h2>
+        <a
+          href="/writing"
+          class="text-sm font-medium"
+          style="color: var(--accent);"
+        >
+          View all &rarr;
+        </a>
+      </div>
+      <div>
+        {recent.map((post) => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

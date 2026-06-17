@@ -1,0 +1,47 @@
+---
+import Base from "@/layouts/Base.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Base title="About — Logs of a Thinking Machine" description="About Karim Deraz — developer, thinker, builder.">
+  <Header />
+  <main class="flex-1 px-6 py-16 max-w-[720px] mx-auto w-full">
+    <h1
+      class="text-3xl md:text-4xl font-semibold tracking-tight mb-8"
+      style="font-family: var(--font-serif); color: var(--text);"
+    >
+      About
+    </h1>
+    <div class="prose">
+      <p>
+        I'm <strong>Karim Deraz</strong> — a software engineer who spends too much time
+        thinking about how we build things and why.
+      </p>
+      <p>
+        This site is where I write about the craft of software engineering, the intersection
+        of AI and human decision-making, and the patterns I notice in how teams communicate,
+        fail, and occasionally get things right.
+      </p>
+      <h2>What I think about</h2>
+      <ul>
+        <li><strong>Software as communication</strong> — code is a conversation between people, not just instructions for machines</li>
+        <li><strong>AI and automation</strong> — how tools change the way we think, not just the way we work</li>
+        <li><strong>Engineering culture</strong> — the gap between how we talk about building software and how it actually happens</li>
+      </ul>
+      <h2>Elsewhere</h2>
+      <ul>
+        <li><a href="https://github.com/karimderaz" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://x.com/karimderaz" target="_blank" rel="noopener">X / Twitter</a></li>
+      </ul>
+      <hr />
+      <p>
+        <em>
+          "Logs of a Thinking Machine" — because all software starts as thought,
+          and every thought leaves a trace.
+        </em>
+      </p>
+    </div>
+  </main>
+  <Footer />
+</Base>
