@@ -9,36 +9,61 @@ const posts = (await getCollection("writing", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const featured = posts.filter((p) => p.data.featured);
-const recent = posts.slice(0, 5);
+const recent = posts.slice(0, 6);
+const total = posts.length;
+const latest = posts[0]?.data.pubDate.toISOString().slice(0, 10) ?? "—";
 ---
 
 <Base title="Logs of a Thinking Machine — Karim Deraz">
   <Header />
   <main class="flex-1">
-    <section class="px-6 pt-24 pb-16 max-w-[720px] mx-auto">
+    <!-- Hero -->
+    <section class="px-6 pt-20 md:pt-28 pb-16 max-w-[860px] mx-auto">
+      <div class="mono text-sm rise" style="color: var(--text-faint); animation-delay: 0s;">
+        <span style="color: var(--accent);">$</span> ./boot --identity
+      </div>
+
       <h1
-        class="text-4xl md:text-6xl font-semibold leading-[1.1] tracking-tight"
-        style="font-family: var(--font-serif); color: var(--text);"
+        class="mt-5 text-5xl md:text-7xl font-semibold leading-[1.02] tracking-tight rise"
+        style="font-family: var(--font-serif); color: var(--text); letter-spacing: -0.035em; animation-delay: 0.05s;"
       >
         Logs of a<br />
-        <span style="color: var(--accent);">Thinking Machine</span>
+        <span class="gradient-text cursor-blink">Thinking Machine</span>
       </h1>
-      <p class="mt-6 text-lg md:text-xl leading-relaxed max-w-[55ch]" style="color: var(--text-muted);">
+
+      <p
+        class="mt-7 text-lg md:text-xl leading-relaxed max-w-[56ch] rise"
+        style="color: var(--text-muted); animation-delay: 0.12s;"
+      >
         Notes on software engineering, AI, and the human side of building things.
-        Written by <strong style="color: var(--text);">Karim Deraz</strong> —
-        a developer who thinks about how we think about code.
+        Written by <strong style="color: var(--text);">Karim Deraz</strong> — a developer
+        who thinks about how we think about code.
       </p>
+
+      <!-- Status line -->
+      <div
+        class="mt-9 flex flex-wrap items-center gap-x-6 gap-y-2 mono text-xs rise"
+        style="color: var(--text-faint); animation-delay: 0.18s;"
+      >
+        <span class="flex items-center gap-2">
+          <span class="glow-dot"></span> writing
+        </span>
+        <span><span style="color: var(--text-muted);">{total}</span> entries logged</span>
+        <span>last commit <span style="color: var(--text-muted);">{latest}</span></span>
+        <a href="/writing" style="color: var(--accent);">browse all &rarr;</a>
+      </div>
     </section>
 
+    <!-- Featured -->
     {featured.length > 0 && (
-      <section class="px-6 pb-12 max-w-[720px] mx-auto">
-        <h2
-          class="text-sm font-medium uppercase tracking-wider mb-6"
-          style="color: var(--text-faint);"
-        >
-          Featured
-        </h2>
-        <div>
+      <section class="px-6 pb-14 max-w-[860px] mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+          <h2 class="mono text-xs uppercase tracking-[0.2em]" style="color: var(--text-faint);">
+            <span style="color: var(--accent);">//</span> featured
+          </h2>
+          <span class="flex-1 h-px" style="background: var(--border);"></span>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2">
           {featured.map((post) => (
             <PostCard
               title={post.data.title}
@@ -52,30 +77,24 @@ const recent = posts.slice(0, 5);
       </section>
     )}
 
-    <section class="px-6 pb-20 max-w-[720px] mx-auto">
-      <div class="flex items-center justify-between mb-6">
-        <h2
-          class="text-sm font-medium uppercase tracking-wider"
-          style="color: var(--text-faint);"
-        >
-          Recent Writing
+    <!-- Recent feed -->
+    <section class="px-6 pb-24 max-w-[860px] mx-auto">
+      <div class="flex items-center gap-3 mb-6">
+        <h2 class="mono text-xs uppercase tracking-[0.2em]" style="color: var(--text-faint);">
+          <span style="color: var(--accent);">//</span> recent logs
         </h2>
-        <a
-          href="/writing"
-          class="text-sm font-medium"
-          style="color: var(--accent);"
-        >
-          View all &rarr;
-        </a>
+        <span class="flex-1 h-px" style="background: var(--border);"></span>
+        <a href="/writing" class="mono text-xs" style="color: var(--accent);">view all</a>
       </div>
-      <div>
-        {recent.map((post) => (
+      <div class="grid gap-4">
+        {recent.map((post, i) => (
           <PostCard
             title={post.data.title}
             description={post.data.description}
             pubDate={post.data.pubDate}
             slug={post.id}
             tags={post.data.tags}
+            index={total - i}
           />
         ))}
       </div>

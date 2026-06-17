@@ -5,25 +5,31 @@
   --font-serif: "Newsreader", "Georgia", serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-  --color-bg: #0a0a0f;
-  --color-bg-elevated: #12121a;
-  --color-surface: #1a1a25;
-  --color-text: #e8e8ed;
-  --color-text-muted: #8888a0;
-  --color-text-faint: #55556a;
+  --color-bg: #08080c;
+  --color-bg-elevated: #101018;
+  --color-surface: #16161f;
+  --color-text: #ececf1;
+  --color-text-muted: #9292a8;
+  --color-text-faint: #5a5a72;
   --color-accent: #ff6b35;
   --color-accent-hover: #ff8c5a;
-  --color-border: #2a2a3a;
+  --color-accent-2: #f5d90a;
+  --color-border: #23232f;
+  --color-grid: rgba(255, 255, 255, 0.025);
+  --color-glow: rgba(255, 107, 53, 0.16);
 
-  --color-bg-light: #fafaf9;
+  --color-bg-light: #f7f6f3;
   --color-bg-elevated-light: #ffffff;
-  --color-surface-light: #f0f0ee;
-  --color-text-light: #1a1a1a;
-  --color-text-muted-light: #6b6b6b;
-  --color-text-faint-light: #999999;
-  --color-accent-light: #d4520a;
-  --color-accent-hover-light: #b8440a;
-  --color-border-light: #e0e0dc;
+  --color-surface-light: #efeee9;
+  --color-text-light: #16160f;
+  --color-text-muted-light: #5c5c52;
+  --color-text-faint-light: #8f8f82;
+  --color-accent-light: #c2410c;
+  --color-accent-hover-light: #9a3412;
+  --color-accent-2-light: #b45309;
+  --color-border-light: #e1e0d8;
+  --color-grid-light: rgba(0, 0, 0, 0.03);
+  --color-glow-light: rgba(194, 65, 12, 0.1);
 }
 
 :root {
@@ -35,7 +41,10 @@
   --text-faint: var(--color-text-faint);
   --accent: var(--color-accent);
   --accent-hover: var(--color-accent-hover);
+  --accent-2: var(--color-accent-2);
   --border: var(--color-border);
+  --grid: var(--color-grid);
+  --glow: var(--color-glow);
 }
 
 [data-theme="light"] {
@@ -47,7 +56,10 @@
   --text-faint: var(--color-text-faint-light);
   --accent: var(--color-accent-light);
   --accent-hover: var(--color-accent-hover-light);
+  --accent-2: var(--color-accent-2-light);
   --border: var(--color-border-light);
+  --grid: var(--color-grid-light);
+  --glow: var(--color-glow-light);
 }
 
 html {
@@ -61,6 +73,119 @@ body {
   min-height: 100dvh;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Grid texture background, fixed behind everything */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+}
+
+/* Radial accent glow at top */
+body::after {
+  content: "";
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 600px;
+  z-index: -1;
+  background: radial-gradient(circle at center, var(--glow), transparent 65%);
+  pointer-events: none;
+}
+
+/* ── Brand / utility primitives ───────────────────────────── */
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cursor-blink::after {
+  content: "_";
+  color: var(--accent);
+  animation: blink 1.1s step-end infinite;
+  margin-left: 0.05em;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.glow-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #2ecc71;
+  box-shadow: 0 0 8px #2ecc71;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+.rise {
+  animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Log-entry post card ──────────────────────────────────── */
+
+.log-entry {
+  position: relative;
+  display: block;
+  padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg-elevated) 60%, transparent);
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  overflow: hidden;
+}
+
+.log-entry::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.25s ease;
+}
+
+.log-entry:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  transform: translateY(-2px);
+}
+
+.log-entry:hover::before {
+  transform: scaleY(1);
 }
 
 ::selection {

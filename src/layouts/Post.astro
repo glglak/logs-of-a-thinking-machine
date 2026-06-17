@@ -30,13 +30,15 @@ const readingTime = (text: string) => {
   <main class="flex-1 px-6 py-16 max-w-[720px] mx-auto w-full">
     <article>
       <header class="mb-12">
-        <time
-          datetime={pubDate.toISOString()}
-          class="text-sm uppercase tracking-wider"
+        <a href="/writing" class="mono text-xs" style="color: var(--text-faint);">
+          <span style="color: var(--accent);">$</span> cd ../writing
+        </a>
+        <div
+          class="mt-6 flex items-center gap-2 mono text-xs uppercase tracking-wider"
           style="color: var(--text-faint);"
         >
-          {formattedDate}
-        </time>
+          <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        </div>
         <h1
           class="mt-3 text-4xl md:text-5xl font-semibold leading-tight"
           style="font-family: var(--font-serif); letter-spacing: -0.03em; color: var(--text);"
@@ -47,17 +49,15 @@ const readingTime = (text: string) => {
           {description}
         </p>
         {tags.length > 0 && (
-          <div class="mt-4 flex flex-wrap gap-2">
+          <div class="mt-5 flex flex-wrap gap-2 mono text-xs">
             {tags.map((tag) => (
-              <span
-                class="text-xs px-2.5 py-1 rounded-full"
-                style="background: var(--surface); color: var(--text-muted);"
-              >
-                {tag}
+              <span style="color: var(--text-faint);">
+                <span style="color: var(--accent);">#</span>{tag}
               </span>
             ))}
           </div>
         )}
+        <div class="mt-8 h-px w-full" style="background: var(--border);"></div>
       </header>
       <div class="prose">
         <slot />
