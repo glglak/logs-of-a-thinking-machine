@@ -1,0 +1,6 @@
+/agent-duel
+/agent-duel.exe
+/agent-duel-results/
+/results/
+agent-duel.json
+*.test

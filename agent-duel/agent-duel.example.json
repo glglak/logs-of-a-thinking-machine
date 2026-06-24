@@ -1,0 +1,16 @@
+{
+  "testCommand": "npm test",
+  "timeout": "20m",
+  "agents": [
+    {
+      "name": "claude-code",
+      "command": "claude -p \"{{TASK}}\" --dangerously-skip-permissions",
+      "costRegex": "(?i)total cost[^$]*\\$([0-9.]+)"
+    },
+    {
+      "name": "codex",
+      "command": "codex exec \"{{TASK}}\"",
+      "costRegex": "(?i)cost[^$]*\\$([0-9.]+)"
+    }
+  ]
+}
