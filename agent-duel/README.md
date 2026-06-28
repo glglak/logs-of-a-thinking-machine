@@ -46,7 +46,7 @@ Requires Go 1.22+ and `git`.
 ```bash
 go build -o agent-duel .
 # or
-go install github.com/karimderaz/agent-duel@latest
+go install github.com/glglak/logs-of-a-thinking-machine/agent-duel@latest
 ```
 
 ## Configure

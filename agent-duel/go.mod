@@ -1,3 +1,3 @@
-module github.com/karimderaz/agent-duel
+module github.com/glglak/logs-of-a-thinking-machine/agent-duel
 
 go 1.22
