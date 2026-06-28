@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -23,7 +24,12 @@ type ExecResult struct {
 func shellCommand(ctx context.Context, command, dir string, extraEnv []string) *exec.Cmd {
 	var cmd *exec.Cmd
 	if runtime.GOOS == "windows" {
-		cmd = exec.CommandContext(ctx, "cmd", "/c", command)
+		// Go's default arg quoting on Windows backslash-escapes embedded quotes,
+		// which cmd.exe does not understand and which corrupts commands like
+		//   aider --message "do the thing"
+		// Set the raw command line ourselves so cmd.exe parses it natively.
+		cmd = exec.CommandContext(ctx, "cmd")
+		cmd.SysProcAttr = &syscall.SysProcAttr{CmdLine: "cmd /c " + command}
 	} else {
 		cmd = exec.CommandContext(ctx, "sh", "-c", command)
 	}

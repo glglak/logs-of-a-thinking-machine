@@ -21,6 +21,13 @@ const isActive = (path: string) => pathname === path || pathname.startsWith(path
         Writing
       </a>
       <a
+        href="/agent-duel"
+        class="text-sm font-medium transition-colors"
+        style={`color: ${isActive("/agent-duel") ? "var(--accent)" : "var(--text-muted)"};`}
+      >
+        Agent Duel
+      </a>
+      <a
         href="/about"
         class="text-sm font-medium transition-colors"
         style={`color: ${isActive("/about") ? "var(--accent)" : "var(--text-muted)"};`}

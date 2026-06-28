@@ -54,6 +54,26 @@ const latest = posts[0]?.data.pubDate.toISOString().slice(0, 10) ?? "—";
       </div>
     </section>
 
+    <!-- Project highlight: Agent Duel -->
+    <section class="px-6 pb-14 max-w-[860px] mx-auto">
+      <a href="/agent-duel" class="log-entry block">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="mono text-xs uppercase tracking-[0.18em]" style="color: var(--accent);">// project</span>
+          <span class="mono text-xs" style="color: var(--text-faint);">open source · runs locally</span>
+        </div>
+        <h3 class="text-xl md:text-2xl font-semibold tracking-tight" style="font-family: var(--font-serif); color: var(--text);">
+          Agent Duel
+        </h3>
+        <p class="mt-2 text-base leading-relaxed" style="color: var(--text-muted);">
+          One task. Many AI coding agents. May the best PR win. Run the same coding task through
+          multiple agents in your own repo and compare them on real evidence — tests, diffs, cost and time.
+        </p>
+        <span class="mono text-sm inline-flex items-center gap-1 mt-3" style="color: var(--accent);">
+          explore the tool &rarr;
+        </span>
+      </a>
+    </section>
+
     <!-- Featured -->
     {featured.length > 0 && (
       <section class="px-6 pb-14 max-w-[860px] mx-auto">

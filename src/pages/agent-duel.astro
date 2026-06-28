@@ -1,0 +1,196 @@
+---
+import Base from "@/layouts/Base.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+const repo = "https://github.com/glglak/logs-of-a-thinking-machine";
+const toolUrl = `${repo}/tree/main/agent-duel`;
+---
+
+<Base
+  title="Agent Duel — Logs of a Thinking Machine"
+  description="One task. Many AI coding agents. May the best PR win. A local, bring-your-own-agent CLI that runs the same coding task through multiple agents and compares the results with real evidence."
+>
+  <Header />
+  <main class="flex-1">
+    <!-- Hero -->
+    <section class="px-6 pt-20 md:pt-28 pb-12 max-w-[860px] mx-auto">
+      <div class="mono text-sm rise" style="color: var(--text-faint);">
+        <span style="color: var(--accent);">$</span> agent-duel --task "ship the feature"
+      </div>
+
+      <h1
+        class="mt-5 text-5xl md:text-6xl font-semibold leading-[1.04] tracking-tight rise"
+        style="font-family: var(--font-serif); color: var(--text); letter-spacing: -0.035em; animation-delay: 0.05s;"
+      >
+        Agent <span class="gradient-text">Duel</span>
+      </h1>
+
+      <p
+        class="mt-6 text-lg md:text-xl leading-relaxed max-w-[58ch] rise"
+        style="color: var(--text-muted); animation-delay: 0.12s;"
+      >
+        One task. Many AI coding agents. <strong style="color: var(--text);">May the best PR win.</strong>
+        Stop choosing coding agents from generic benchmarks — give them your actual task,
+        in your actual repo, and compare the results with real evidence.
+      </p>
+
+      <div
+        class="mt-8 flex flex-wrap items-center gap-3 rise"
+        style="animation-delay: 0.18s;"
+      >
+        <a
+          href={toolUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mono text-sm px-4 py-2.5 rounded-lg font-medium transition-colors"
+          style="background: var(--accent); color: var(--bg);"
+        >
+          View on GitHub &rarr;
+        </a>
+        <a
+          href="#quickstart"
+          class="mono text-sm px-4 py-2.5 rounded-lg font-medium transition-colors"
+          style="border: 1px solid var(--border); color: var(--text-muted);"
+        >
+          Quickstart
+        </a>
+      </div>
+
+      <div
+        class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 mono text-xs rise"
+        style="color: var(--text-faint); animation-delay: 0.22s;"
+      >
+        <span class="flex items-center gap-2"><span class="glow-dot"></span> runs locally</span>
+        <span>bring your own agents &amp; keys</span>
+        <span>never proxies inference</span>
+      </div>
+    </section>
+
+    <!-- Example output -->
+    <section class="px-6 pb-4 max-w-[860px] mx-auto">
+      <div class="flex items-center gap-3 mb-5">
+        <h2 class="mono text-xs uppercase tracking-[0.2em]" style="color: var(--text-faint);">
+          <span style="color: var(--accent);">//</span> example run
+        </h2>
+        <span class="flex-1 h-px" style="background: var(--border);"></span>
+      </div>
+
+      <div
+        class="rounded-xl overflow-hidden"
+        style="border: 1px solid var(--border); background: color-mix(in srgb, var(--bg-elevated) 70%, transparent);"
+      >
+        <!-- terminal chrome -->
+        <div class="flex items-center gap-2 px-4 py-2.5" style="border-bottom: 1px solid var(--border);">
+          <span class="w-3 h-3 rounded-full" style="background:#ff5f56;"></span>
+          <span class="w-3 h-3 rounded-full" style="background:#ffbd2e;"></span>
+          <span class="w-3 h-3 rounded-full" style="background:#27c93f;"></span>
+          <span class="mono text-xs ml-2" style="color: var(--text-faint);">agent-duel</span>
+        </div>
+        <pre class="mono text-xs md:text-sm overflow-x-auto px-5 py-4 leading-relaxed" style="color: var(--text-muted);"><span style="color: var(--text-faint);"><span style="color: var(--accent);">$</span> agent-duel --repo . --task "Add subscription cancellation + Stripe webhook + tests"</span>
+
+AGENT        STATUS    TESTS   FILES  COST    TIME
+<span style="color: var(--accent-2);">claude-code  complete  48/48   6      $7.20   19m</span>
+codex        partial   46/48   5      $4.80   13m
+gemini-cli   partial   32/48   9      $2.10   11m
+
+<span style="color: var(--text);">Winner: claude-code</span>  <span style="color: var(--text-faint);">(all tests pass, fewest stray files)</span></pre>
+      </div>
+      <p class="mt-4 text-sm" style="color: var(--text-faint);">
+        Instead of asking <em>"which coding agent is best?"</em> you find out
+        <strong style="color: var(--text-muted);">"which agent is best for this exact task in our codebase?"</strong>
+      </p>
+    </section>
+
+    <!-- Body -->
+    <section class="px-6 py-10 max-w-[820px] mx-auto">
+      <div class="prose">
+        <h2>Why it exists</h2>
+        <p>
+          Public coding-agent leaderboards — SWE-bench, Terminal-Bench and friends — tell you how
+          agents do on <em>someone else's</em> tasks. They can't tell you whether an agent can handle
+          your architecture, your conventions, your obscure legacy code, or your one weird framework.
+        </p>
+        <p>
+          And the agent vendors will never neutrally show you that a competitor did the job better.
+          Agent Duel's neutrality is the whole point: it runs the agents <strong>you</strong> choose,
+          on <strong>your</strong> task, and reports concrete evidence — passing tests, diffs, cost
+          and time — not a vague AI opinion.
+        </p>
+
+        <h2>How it works</h2>
+        <ol>
+          <li><strong>Same starting line.</strong> Each agent gets its own isolated git worktree branched from the same base commit, so they never step on each other.</li>
+          <li><strong>Same task.</strong> Your task prompt is handed to every agent unchanged.</li>
+          <li><strong>Real verification.</strong> After each agent finishes, your test command runs against its result.</li>
+          <li><strong>Scored on evidence.</strong> Results are ranked: tests passing → fewer files touched → lower cost → faster.</li>
+          <li><strong>Inspect everything.</strong> You get a side-by-side table plus <code>duel.md</code> and <code>duel.json</code> reports, and can keep the branches to read the actual diffs.</li>
+        </ol>
+
+        <h2>Bring your own agents</h2>
+        <p>
+          An "agent" is just a shell command you configure. Agent Duel never proxies inference and
+          never sees your API keys — the agents run locally under your own credentials, so there are
+          no token costs or remote-code-execution risks on anyone else's servers. It works with any
+          tool that edits files in a repo: Claude Code, Codex, Aider, and others.
+        </p>
+
+        <h2 id="quickstart">Quickstart</h2>
+        <p>You'll need <a href={`${repo}`} target="_blank" rel="noopener">the repo</a>, a Go toolchain to build the CLI, and at least one coding-agent CLI with its API key set.</p>
+
+        <p><strong>1. Build the CLI</strong></p>
+        <pre><code>git clone https://github.com/glglak/logs-of-a-thinking-machine.git
+cd logs-of-a-thinking-machine/agent-duel
+go build -o agent-duel .</code></pre>
+
+        <p><strong>2. Describe the duel</strong> in an <code>agent-duel.json</code>. Each agent is a command; <code>{"{{TASK}}"}</code> is replaced with your task text:</p>
+        <pre><code>{`{
+  "testCommand": "npm test",
+  "timeout": "15m",
+  "agents": [
+    {
+      "name": "claude-sonnet",
+      "command": "aider --model openrouter/anthropic/claude-3.7-sonnet --message \\"{{TASK}}\\" --yes --no-stream"
+    },
+    {
+      "name": "deepseek",
+      "command": "aider --model openrouter/deepseek/deepseek-chat --message \\"{{TASK}}\\" --yes --no-stream"
+    }
+  ]
+}`}</code></pre>
+        <p style="font-size: 0.95rem; color: var(--text-muted);">
+          The example above duels two <em>models</em> through a single
+          <a href="https://aider.chat" target="_blank" rel="noopener">Aider</a> + OpenRouter key — a
+          cheap way to try it. Swap in <code>claude</code>, <code>codex</code>, or any other agent CLI
+          just as easily.
+        </p>
+
+        <p><strong>3. Run the duel</strong> from inside your project:</p>
+        <pre><code>agent-duel \\
+  --repo . \\
+  --config agent-duel.json \\
+  --task "Implement password reset with email tokens and tests" \\
+  --keep</code></pre>
+        <p style="font-size: 0.95rem; color: var(--text-muted);">
+          <code>--keep</code> preserves the per-agent branches so you can review each diff. Reports
+          land in <code>agent-duel-results/</code>.
+        </p>
+
+        <h2>Honest caveats</h2>
+        <ul>
+          <li><strong>Agents are non-deterministic.</strong> A single run is a signal, not a verdict — re-run for confidence.</li>
+          <li><strong>Passing tests ≠ good code.</strong> The diff is there precisely so you can judge quality yourself.</li>
+          <li><strong>Garbage in, garbage out.</strong> Good tasks and a real test suite make the comparison meaningful.</li>
+        </ul>
+
+        <hr />
+        <p>
+          Agent Duel is open source and built in the same spirit as everything else here —
+          <em>logs of a thinking machine</em>, made legible. Star it, fork it, or
+          <a href={toolUrl} target="_blank" rel="noopener">read the source</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

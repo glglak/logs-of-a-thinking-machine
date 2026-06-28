@@ -1,0 +1,16 @@
+{
+  "testCommand": "npm test",
+  "timeout": "15m",
+  "agents": [
+    {
+      "name": "claude-sonnet",
+      "command": "aider --model openrouter/anthropic/claude-3.7-sonnet --message \"{{TASK}}\" --yes --no-stream --no-check-update",
+      "costRegex": "(?i)cost[^$]*\\$([0-9.]+)"
+    },
+    {
+      "name": "deepseek",
+      "command": "aider --model openrouter/deepseek/deepseek-chat --message \"{{TASK}}\" --yes --no-stream --no-check-update",
+      "costRegex": "(?i)cost[^$]*\\$([0-9.]+)"
+    }
+  ]
+}
